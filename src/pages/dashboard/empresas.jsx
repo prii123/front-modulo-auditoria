@@ -3,7 +3,7 @@ import Link from "next/link";
 import Layout from "../../components/layout/Body";
 import { myGet } from "../../libs/fetchApi";
 const empresas = ({ data }) => {
-  // console.log(data[0]);
+  // console.log(data);
   return (
     <Layout>
       {/* {JSON.stringify(data)} */}

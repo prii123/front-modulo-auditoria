@@ -1,8 +1,7 @@
 import { useRef, useState } from "react";
 import { useAuth } from "../libs/auth";
 import { useRouter } from "next/router";
-import Link from "next/link"
-
+import Link from "next/link";
 
 export default function Login() {
   const [email, setEmail] = useState(null);
@@ -16,12 +15,11 @@ export default function Login() {
   async function handleLogin(event) {
     event.preventDefault();
 
-
     signIn({ email, password }).then((ress) => {
       // console.log(ress);
-      setMessage(ress)
+      setMessage(ress);
 
-    //   cookie.set('auth', ress)
+      //   cookie.set('auth', ress)
 
       if (ress.pass) router.push("/dashboard");
     });
@@ -29,18 +27,23 @@ export default function Login() {
 
   return (
     <div>
-      {JSON.stringify(message)}
-      <input type="text" placeholder="email" onChange={(e)=>{
-        e.preventDefault()
-        setEmail(e.target.value)
-      }} />
-      <input type="password" placeholder="password" onChange={(e)=>{
-        e.preventDefault()
-        setPasword(e.target.value)
-      }} />
+      <input
+        type="text"
+        placeholder="email"
+        onChange={(e) => {
+          e.preventDefault();
+          setEmail(e.target.value);
+        }}
+      />
+      <input
+        type="password"
+        placeholder="password"
+        onChange={(e) => {
+          e.preventDefault();
+          setPasword(e.target.value);
+        }}
+      />
       <button onClick={handleLogin}>Login</button>
-
-      <Link href={'/dashboard'}><a>dashboard</a></Link>
     </div>
   );
 }

@@ -34,6 +34,7 @@ function useProvideAuth() {
 
   const signOut = () => {
     setAuthToken(null)
+    cookie.set('__session', "")
   }
 
   const signIn = async ({ email, password }) => {
@@ -47,7 +48,7 @@ function useProvideAuth() {
       }
     });
      
-    console.log(result?.data)
+    // console.log(result?.data)
   
     if (result?.data !== 'Invalid' ) {
       try{
