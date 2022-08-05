@@ -17,6 +17,9 @@ const doc = ({ documentosAuditar }) => {
   const [idDocumentoAuditado, setIdDocumentoAuditado] = useState("");
   const [modal, setModal] = useState("none");
   const [hallazgoModal, setHallazgoModal] = useState([]);
+
+  const [idDelHallazgoEncontrado, setIdDelHallazgoEncontrado] = useState("");
+
   const eliminarDatos = async () => {
     const token = cookie.get("__session");
 
@@ -54,25 +57,36 @@ const doc = ({ documentosAuditar }) => {
       accionCorrectiva: accionSeguir,
     };
 
-    const incertarHallaz = await axios({
-      method: "post",
-      url: libs.location() + "api/hallazgos",
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-      data: docBody,
-    });
+    if (!idDelHallazgoEncontrado == "") {
+      const incertarHallaz = await axios({
+        method: "put",
+        url: libs.location() + "api/hallazgos/" + idDelHallazgoEncontrado,
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        data: docBody,
+      });
+    } else {
+      const incertarHallaz = await axios({
+        method: "post",
+        url: libs.location() + "api/hallazgos",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        data: docBody,
+      });
 
-    const actualizaDocumento = await axios({
-      method: "put",
-      url: libs.location() + "api/documento/" + idDocumentoAuditado,
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-      data: {
-        hallazgo: incertarHallaz?.data?.insertId,
-      },
-    });
+      const actualizaDocumento = await axios({
+        method: "put",
+        url: libs.location() + "api/documento/" + idDocumentoAuditado,
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        data: {
+          hallazgo: incertarHallaz?.data?.insertId,
+        },
+      });
+    }
     setModal("none");
     window.location.reload();
   };
@@ -89,13 +103,16 @@ const doc = ({ documentosAuditar }) => {
     });
 
     setHallazgoModal(hallazgo?.data);
+    setHallazgo(hallazgo?.data[0]?.hallazgo);
+    setAccionSeguir(hallazgo?.data[0]?.accionCorrectiva);
+    setIdDelHallazgoEncontrado(hallazgo?.data[0]?.id);
     //  console.log(hallazgo)
   };
 
   const eliminarHalazgo = async () => {
     const token = cookie.get("__session");
 
-    const hallazgo = await axios({
+    const hallazgoo = await axios({
       method: "delete",
       url: libs.location() + "api/hallazgos/" + hallazgoModal[0]?.id,
       headers: {
@@ -114,9 +131,6 @@ const doc = ({ documentosAuditar }) => {
       },
     });
 
-
-
-
     setModal("none");
     window.location.reload();
 
@@ -129,7 +143,7 @@ const doc = ({ documentosAuditar }) => {
         display={modal}
         onClose={() => {
           setModal("none");
-          setHallazgoModal('');
+          setHallazgoModal("");
         }}
         onSave={incertarHallazgos}
         onDelete={eliminarHalazgo}
@@ -146,7 +160,7 @@ const doc = ({ documentosAuditar }) => {
             id="exampleFormControlTextarea1"
             rows="4"
             onChange={(e) => setHallazgo(e.target.value)}
-            value={hallazgoModal && hallazgoModal[0]?.hallazgo}
+            value={hallazgo}
           ></textarea>
         </div>
         <br />
@@ -158,7 +172,7 @@ const doc = ({ documentosAuditar }) => {
             id="exampleFormControlTextarea1"
             rows="4"
             onChange={(e) => setAccionSeguir(e.target.value)}
-            value={hallazgoModal && hallazgoModal[0]?.accionCorrectiva}
+            value={accionSeguir}
           ></textarea>
         </div>
       </Modal>
@@ -194,11 +208,10 @@ const doc = ({ documentosAuditar }) => {
         &nbsp;&nbsp;&nbsp;Eliminar
       </a>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      
       <br />
       <br />
       <div>
-        <table className="table table-bordered table-hover">
+        <table className="table table-bordered table-hover" style={{fontSize: '.9rem'}}>
           <thead>
             <tr>
               <th scope="col">#</th>

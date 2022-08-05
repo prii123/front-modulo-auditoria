@@ -5,6 +5,7 @@ import { jsPDF } from "jspdf";
 import header from "./header";
 import asunto from "./asunto";
 import body from "./body";
+import hallazgos from "./hallazgos";
 
 import img from '../../../public/ayc.jpg'
 const pdfInformeVisita = ({ data }) => {
@@ -12,22 +13,25 @@ const pdfInformeVisita = ({ data }) => {
 
   const onClic = () => {
     var doc = new jsPDF();
-    let startY;
+    let startY; 
 
-    startY = header(doc, data.head);
+    startY = header(doc, data?.head);
     startY += 10;
 
-    startY = asunto(doc, startY, data.asunto);
+    startY = asunto(doc, startY, data?.asunto);
     startY += 20;
 
-    startY = body(doc, startY, data.body);
+    startY = body(doc, startY, data?.body);
+    startY += 20;
 
-    doc.save("Zest.pdf");
+    startY = hallazgos(doc, startY, data?.hallazgo)
+
+    doc.save("InformeVisita.pdf");
   };
 
   return (
     <div>
-      <button onClick={onClic}>pdf</button>
+      <button className="btn btn-primary" onClick={onClic}>Descargar</button>
       <Image
         src={img}
         alt="item.title"

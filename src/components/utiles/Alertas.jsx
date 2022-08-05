@@ -1,11 +1,12 @@
 import React from "react";
 
 const Alertas = ({ descripcion, color }) => {
-    const [displayAlerta, setDisplayAlerta] = React.useState('flex')
+    const [displayAlerta, setDisplayAlerta] = React.useState('fixed')
+
   return (
-    <>
-      <div className={`alert alert-${color} alert-dismissible d-${displayAlerta} `} role="alert" id="alertaComponent">
-        <div>{descripcion}</div>
+    <> 
+      <div className={`alert alert-${color} alert-dismissible d-${displayAlerta} fixed-top  start-50 w-50 hover-cards`} role="alert" id="alertaComponent">
+        <h4>{descripcion.toUpperCase()}</h4>
         <button
           type="button"
           className="btn-close"

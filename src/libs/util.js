@@ -3,18 +3,27 @@ const ayudas = {
     return new Intl.NumberFormat().format(number);
   },
 
-  convertirANumero(str) {
-    const string = str.toString();
-    if (string) {
-      const str1 = string?.replace(",", "");
-      const str2 = str1?.replace(".", "");
-      const str3 = str2?.replace("C", "");
-      const str4 = str3?.replace("N", "");
-      const str5 = str4?.replace("I", "");
-      const str6 = str5?.replace("T", "");
+  convertirANumero(cadena) {
+    // expresion regular que valida solo numeros
+    var ExpRegSoloNumeros = "^[0-9]+$";
 
-      return parseInt(str6);
-    }
+   
+      // array vacio donde se almacenaran los valores numericos
+      var array = [];
+      // toma la cadena y hace un ciclo
+      for (var i = 0; i < cadena.length; i++) {
+        //valida si es numero lo agrega al array vacio
+        if (cadena[i].match(ExpRegSoloNumeros) != null) {
+          array.push(cadena[i]);
+        }
+      }
+      //tomo el array lleno con los numeros y utilizo el metodo toString para volverlo una cadena
+      const cadena2 = array.toString();
+      // remplazo todas las comas que se generarn por el metodo toString
+      const str1 = cadena2?.replace(/,/g, "");
+      //retorno la cadena antes convirtiendola en un Integer
+      return parseInt(str1) || 0;
+    
   },
 
   formatFecha(hoy) {

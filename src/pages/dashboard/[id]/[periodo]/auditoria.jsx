@@ -69,7 +69,6 @@ const auditoria = ({ data }) => {
 export async function getServerSideProps(ctx) {
   // console.log(ctx)
   const token = ctx?.req?.cookies?.__session;
-
   const tiposDeDocumentos = await axios({
     method: "get",
     url: libs.location() + "api/tipodocumento",

@@ -1,29 +1,91 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../../../../../components/layout/Body";
 import axios from "axios";
 import libs from "../../../../../libs/util";
-import InformeVisita from "../../../../../libs/pdf/informeVisita/Informe"
+import InformeVisita from "../../../../../libs/pdf/informeVisita/Informe";
+import cookie from "js-cookie";
+import { useRouter } from "next/router";
 
-const informe = ({ informe }) => {
-  // console.log(libs.formatFechaLarga(new Date()));
-  // console.log(informe);
+import Alerta from "../../../../../components/utiles/Alertas";
 
-  const info = {
-    head: {
-      fecha: libs.formatFechaLarga(new Date()),
-      dirigido: informe[0]?.razonSocial,
-    },
-    asunto: {
-      asunto: "REVISIÓN DE LA INFORMACIÓN CONTABLE",
-      delegado: informe[0]?.username,
-    },
-    body: {
-      periodo: informe[0]?.periodo,
-      documentos: informe,
-    },
+const informe = () => {
+  const router = useRouter();
+
+  const token = cookie.get("__session");
+  const periodo = router.query?.periodo || 0;
+  const idEmpresa = router.query?.id;
+
+  const [datosInforme, setDatosInforme] = useState({});
+  const [dataBolea, setDataBolea] = useState(false);
+
+  const [color, setColor] = useState("none");
+  const [mensaje, setMensaje] = useState(false);
+
+  const preparar = async () => {
+    const preparaInforme = await axios({
+      method: "get",
+      url:
+        libs.location() +
+        "api/prepara-informe-revision/" +
+        idEmpresa +
+        "/" +
+        periodo,
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log(preparaInforme);
   };
 
-  console.log(info)
+  const generarDatosInforme = async () => {
+    const res = await axios({
+      method: "get",
+      url:
+        libs.location() +
+        "api/consulta-informe-revision/" +
+        idEmpresa +
+        "/" +
+        periodo,
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+
+    const hallazgos = await axios({
+      method: "get",
+      url:
+        libs.location() +
+        "api/consulta-hallazgos/" +
+        idEmpresa +
+        "/" +
+        periodo,
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+
+    const info = {
+      head: {
+        fecha: libs.formatFechaLarga(new Date()),
+        dirigido: res.data[0]?.razonSocial,
+      },
+      asunto: {
+        asunto: "REVISIÓN DE LA INFORMACIÓN CONTABLE",
+        delegado: res.data[0]?.username,
+      },
+      body: {
+        periodo: res.data[0]?.periodo,
+        documentos: res.data,
+      },
+      hallazgo: hallazgos?.data
+    };
+    console.log(info);
+    setDatosInforme(info);
+    setDataBolea(true);
+  };
+
+  //
 
   return (
     <Layout head={<div>INFORMES</div>}>
@@ -45,35 +107,29 @@ const informe = ({ informe }) => {
       </a>
       <br />
 
-      <InformeVisita data={info}  />
+      <button onClick={() => setMensaje(true)}>test</button>
+
+      {mensaje ? (
+        <Alerta
+          descripcion={"mensaje"}
+          color={"primary"}
+        />
+      ) : null}
+
+      {/* <div id="test"></div> */}
+
+      <button className="btn btn-primary" onClick={preparar}>
+        Prepara
+      </button>
+      <br />
+      <br />
+      <button className="btn btn-primary" onClick={generarDatosInforme}>
+        Generar
+      </button>
+
+      {dataBolea == true ? <InformeVisita data={datosInforme} /> : null}
     </Layout>
   );
 };
-
-export async function getServerSideProps(ctx) {
-  const token = ctx?.req?.cookies?.__session;
-  const periodo = ctx?.query?.periodo || 0;
-  const idEmpresa = ctx?.query?.id;
-
-  // console.log(tipoDoc);
-
-  const documentosPeriodo = await axios({
-    method: "get",
-    url:
-      libs.location() +
-      "api/consulta-informe-revision/" +
-      idEmpresa +
-      "/" +
-      periodo,
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
-  });
-  return {
-    props: {
-      informe: documentosPeriodo?.data,
-    },
-  };
-}
 
 export default informe;

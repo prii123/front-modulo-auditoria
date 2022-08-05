@@ -53,7 +53,7 @@ const importacion = ({ data }) => {
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
-    } else if (documento[0]?.numeroDoc == undefined) {
+    } else if (documento[0]?.numeroDoc == undefined || documento[0]?.numeroDoc == '') {
       // console.log("error numero documento")
       setStatusMenssage(true);
       setMensajeError("falta numero de documento");
@@ -105,7 +105,7 @@ const importacion = ({ data }) => {
       documento.map(async (daDoc) => {
         const body = {
           idEmpresa: libs.convertirANumero(idEmpresa),
-          nit: daDoc?.nit,
+          nit: libs.convertirANumero(daDoc?.nit),
           razonSocial: daDoc?.razonSocial,
           tipoDoc: libs.convertirANumero(tipoDoc),
           numeroDoc: libs.convertirANumero(daDoc?.numeroDoc),
@@ -229,7 +229,7 @@ const importacion = ({ data }) => {
             />
           </div>
           <div>
-            <table className="table table-bordered">
+            <table className="table table-bordered" style={{fontSize: '.9rem'}}>
               <thead>
                 <tr>
                   <th scope="col">Nit</th>
@@ -246,14 +246,14 @@ const importacion = ({ data }) => {
                 {documento?.map((doc, key) => {
                   return(
                     <tr key={key}>
-                        <td>{doc?.nit}</td>
+                        <td>{libs.convertirANumero(doc?.nit) }</td>
                         <td>{doc?.razonSocial}</td>
-                        <td>{doc?.numeroDoc}</td>
+                        <td>{libs.convertirANumero(doc?.numeroDoc)}</td>
                         <td>{doc?.numeroFE}</td>
-                        <td>{doc?.valorNeto}</td>
-                        <td>{doc?.impuesto}</td>
-                        <td>{doc?.reteFuente}</td>
-                        <td>{doc?.reteIva}</td>
+                        <td>{libs.convertirANumero(doc?.valorNeto)}</td>
+                        <td>{libs.convertirANumero(doc?.impuesto)}</td>
+                        <td>{libs.convertirANumero(doc?.reteFuente)}</td>
+                        <td>{libs.convertirANumero(doc?.reteIva)}</td>
                       </tr>
                   )
                 }

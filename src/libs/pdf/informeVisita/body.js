@@ -2,7 +2,7 @@ import newPage from "./newPage";
 const body = (doc, startY, body) => {
   doc.setFontSize(11);
   doc.text(
-    "AUDITORÍA DEL PROCESOS CONTABLE DEL PERIODO " + body.periodo + " : ",
+    "AUDITORÍA DEL PROCESOS CONTABLE DEL PERIODO " + body?.periodo + " : ",
     10,
     startY
   );
@@ -14,13 +14,13 @@ const body = (doc, startY, body) => {
   body.documentos.map(async (documentosFuente) => {
     startY =  newPage(doc, startY, 40);
 
-    doc.text(documentosFuente.nombre.toUpperCase(), 10, startY);
+    doc.text(documentosFuente?.nombre.toUpperCase(), 10, startY);
     startY += 7;
     doc.text(
       "Se revisó la facturación del mes Junio desde el consecutivo número " +
-        documentosFuente.valMin +
+        documentosFuente?.valMin +
         " hasta el consecutivo número " +
-        documentosFuente.valMax +
+        documentosFuente?.valMax +
         ".",
       10,
       startY

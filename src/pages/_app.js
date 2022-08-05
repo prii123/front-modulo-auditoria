@@ -1,8 +1,9 @@
 import { AuthProvider } from "../libs/auth";
-// importing bootswatch
-// import 'bootstrap'
-import 'bootswatch/dist/cosmo/bootstrap.min.css'
-// import './styles/globals.css'
+
+// import 'bootswatch/dist/cosmo/bootstrap.min.css'
+
+import '../scss/custom.css'
+import '../scss/personalizado.css'
 
 function MyApp({ Component, pageProps }) {
   return (
