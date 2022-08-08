@@ -1,4 +1,4 @@
-import newPage from "./newPage";
+import newPage from "../newPage";
 const body = (doc, startY, body) => {
   doc.setFontSize(11);
   doc.text(
@@ -10,37 +10,32 @@ const body = (doc, startY, body) => {
   doc.text("AUDITORIA DE LOS DOCUMENTOS FUENTE", 10, startY);
   startY += 25;
 
-
   body.documentos.map(async (documentosFuente) => {
-    startY =  newPage(doc, startY, 40);
+    startY = newPage(doc, startY, 40);
+    doc.setFont('courier','normal');
 
+    doc.setFont('courier','bold');
     doc.text(documentosFuente?.nombre.toUpperCase(), 10, startY);
+    doc.setFont('courier','normal');
     startY += 7;
-    doc.text(
+
+    let informe = doc.splitTextToSize(
       "Se revisó la facturación del mes Junio desde el consecutivo número " +
         documentosFuente?.valMin +
         " hasta el consecutivo número " +
         documentosFuente?.valMax +
         ".",
-      10,
-      startY
+      190
     );
-    startY += 5;
+    
+    doc.text(informe, 10, startY);
+    startY += 5 * informe.length;
 
     doc.line(10, startY, 190, startY);
 
-    startY += 15;
+    startY += 10;
   });
 
-  // console.log(startY)
-
-  //   const pageHeight = doc.internal.pageSize.height;
-  //   console.log(pageHeight)
-
-  // body.documentos.forEach((element) => {
-  //   doc.text(doc.nombre, 10, startY);
-  //   startY += 5;
-  // });
 
   startY += 5;
 

@@ -14,22 +14,23 @@ export const cards = [
   },
   {
     id: 2,
+    titulo: "Retencion en la Fuente",
+    descripcion: "Genera la retencion en la fuente a titulo de renta",
+    link: "retencion",
+  },
+  {
+    id: 3,
     titulo: "Informes",
     descripcion: "Realiza tu informe de auditoria",
     link: "informe",
   },
   {
-    id: 3,
+    id: 4,
     titulo: "Importar Datos",
     descripcion: "Importa tus datos",
     link: "importacion",
   },
-  {
-    id: 4,
-    titulo: "Retencion en la Fuente",
-    descripcion: "Genera la retencion en la fuente a titulo de renta",
-    link: "retencion",
-  },
+  
 ];
 const index = ({ data }) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks

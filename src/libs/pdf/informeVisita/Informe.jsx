@@ -7,13 +7,13 @@ import asunto from "./asunto";
 import body from "./body";
 import hallazgos from "./hallazgos";
 
-import img from '../../../public/ayc.jpg'
+import img from "../../../public/ayc.jpg";
 const pdfInformeVisita = ({ data }) => {
   // Default export is a4 paper, portrait, using millimeters for units
 
   const onClic = () => {
     var doc = new jsPDF();
-    let startY; 
+    let startY;
 
     startY = header(doc, data?.head);
     startY += 10;
@@ -22,22 +22,20 @@ const pdfInformeVisita = ({ data }) => {
     startY += 20;
 
     startY = body(doc, startY, data?.body);
-    startY += 20;
+    startY += 10;
 
-    startY = hallazgos(doc, startY, data?.hallazgo)
+    startY = hallazgos(doc, startY, data?.hallazgo);
 
-    doc.save("InformeVisita.pdf");
+    // doc.save("InformeVisita.pdf");
+    window.open(doc.output("bloburl"), "_blank");
   };
 
   return (
     <div>
-      <button className="btn btn-primary" onClick={onClic}>Descargar</button>
-      <Image
-        src={img}
-        alt="item.title"
-        width="400"
-        height="300"
-      />
+      <button className="btn btn-primary" onClick={onClic}>
+        Visualizar
+      </button>
+      <Image src={img} alt="item.title" width="400" height="300" />
     </div>
   );
 };

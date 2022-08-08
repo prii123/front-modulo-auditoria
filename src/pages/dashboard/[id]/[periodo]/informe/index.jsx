@@ -18,7 +18,6 @@ const informe = () => {
   const [datosInforme, setDatosInforme] = useState({});
   const [dataBolea, setDataBolea] = useState(false);
 
-  const [color, setColor] = useState("none");
   const [mensaje, setMensaje] = useState(false);
 
   const preparar = async () => {
@@ -55,11 +54,7 @@ const informe = () => {
     const hallazgos = await axios({
       method: "get",
       url:
-        libs.location() +
-        "api/consulta-hallazgos/" +
-        idEmpresa +
-        "/" +
-        periodo,
+        libs.location() + "api/consulta-hallazgos/" + idEmpresa + "/" + periodo,
       headers: {
         authorization: `Bearer ${token}`,
       },
@@ -78,9 +73,8 @@ const informe = () => {
         periodo: res.data[0]?.periodo,
         documentos: res.data,
       },
-      hallazgo: hallazgos?.data
+      hallazgo: hallazgos?.data,
     };
-    console.log(info);
     setDatosInforme(info);
     setDataBolea(true);
   };
@@ -107,14 +101,7 @@ const informe = () => {
       </a>
       <br />
 
-      <button onClick={() => setMensaje(true)}>test</button>
-
-      {mensaje ? (
-        <Alerta
-          descripcion={"mensaje"}
-          color={"primary"}
-        />
-      ) : null}
+      {mensaje ? <Alerta descripcion={"mensaje"} color={"primary"} /> : null}
 
       {/* <div id="test"></div> */}
 

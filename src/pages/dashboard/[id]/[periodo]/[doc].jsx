@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useState, useEffect } from "react";
 import Layout from "../../../../components/layout/Body";
 import Modal from "../../../../components/utiles/Modal";
 import { useRouter } from "next/router";
@@ -6,18 +7,16 @@ import Link from "next/link";
 import axios from "axios";
 import libs from "../../../../libs/util";
 import cookie from "js-cookie";
-
-const doc = ({ documentosAuditar }) => {
+const doc = ({documentosAuditar}) => {
   const Router = useRouter();
 
-  // console.log()
+
 
   const [hallazgo, setHallazgo] = useState("");
   const [accionSeguir, setAccionSeguir] = useState("");
   const [idDocumentoAuditado, setIdDocumentoAuditado] = useState("");
   const [modal, setModal] = useState("none");
   const [hallazgoModal, setHallazgoModal] = useState([]);
-
   const [idDelHallazgoEncontrado, setIdDelHallazgoEncontrado] = useState("");
 
   const eliminarDatos = async () => {
@@ -88,7 +87,7 @@ const doc = ({ documentosAuditar }) => {
       });
     }
     setModal("none");
-    window.location.reload();
+    Router.reload()
   };
 
   const buscarHalazgo = async (idBuscado) => {
@@ -214,7 +213,7 @@ const doc = ({ documentosAuditar }) => {
         <table className="table table-bordered table-hover" style={{fontSize: '.9rem'}}>
           <thead>
             <tr>
-              <th scope="col">#</th>
+              <th scope="col"></th>
               <th scope="col">Nit</th>
               <th scope="col">Razon Social</th>
               <th scope="col">Numero Documento</th>
@@ -229,7 +228,7 @@ const doc = ({ documentosAuditar }) => {
             </tr>
           </thead>
           <tbody className="table-group-divider">
-            {documentosAuditar &&
+            {documentosAuditar ?
               documentosAuditar.map((dat, key) => {
                 return (
                   <tr
@@ -242,10 +241,10 @@ const doc = ({ documentosAuditar }) => {
                     <td>{dat.razonSocial}</td>
                     <td>{dat.numeroDoc}</td>
                     <td>{dat.numeroFE}</td>
-                    <td>{dat.valorNeto}</td>
-                    <td>{dat.impuesto}</td>
-                    <td>{dat.reteFuente}</td>
-                    <td>{dat.reteIva}</td>
+                    <td className="text-end">{dat.valorNeto}</td>
+                    <td className="text-end">{dat.impuesto}</td>
+                    <td className="text-end">{dat.reteFuente}</td>
+                    <td className="text-end">{dat.reteIva}</td>
                     <td className="table-info">-</td>
                     <td className="table-info">-</td>
                     <td className="table-info">-</td>
@@ -263,7 +262,7 @@ const doc = ({ documentosAuditar }) => {
                     </td>
                   </tr>
                 );
-              })}
+              }) : null}
           </tbody>
         </table>
       </div>
@@ -277,7 +276,7 @@ export async function getServerSideProps(ctx) {
   const periodo = ctx?.query?.periodo || 0;
   const idEmpresa = ctx?.query?.id;
 
-  // console.log(tipoDoc);
+  // console.log(tipoDoc); getServerSideProps
 
   const documentosPeriodo = await axios({
     method: "get",
