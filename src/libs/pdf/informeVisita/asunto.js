@@ -5,7 +5,7 @@ const asunto = (doc, startY, asunto) => {
   startY += 5;
   doc.text("ANÁLISIS Y CONSULTORIAS SAS", 10, startY);
   startY += 5;
-  doc.text("DELEGADO: " + asunto?.delegado, 10, startY);
+  doc.text("GESTOR: " + asunto?.delegado, 10, startY);
 
   startY += 5;
 

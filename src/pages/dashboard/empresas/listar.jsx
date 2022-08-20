@@ -27,20 +27,20 @@ const empresas = ({ data }) => {
   return (
     <Layout head={<Nav />}>
       {/* {JSON.stringify(data)} */}
-      <ul className="list-group">
+      <div className="row">
         {data?.map((emp, key) => {
           return (
-            <div key={key}>
+            <div key={key} className="col-6">
               <Link href={`/dashboard/[id]`} as={`/dashboard/${emp?.id}`}>
                 <div
-                  className="card mb-3 hover-cards"
-                  style={{ maxWidth: 540 }}
+                  className="card mb-3 hover-cards "
+                  style={{ maxWidth: 540, maxHeight: 150 }}
                 >
                   <div className="row g-0">
                     <div className="col-md-4">
                       <img
                         src={emp?.logo}
-                        className="img-fluid rounded-start"
+                        className="img-fluid rounded-start "
                         alt={emp?.razonSocial}
                       />
                     </div>
@@ -61,7 +61,7 @@ const empresas = ({ data }) => {
             </div>
           );
         })}
-      </ul>
+      </div>
     </Layout>
   );
 };

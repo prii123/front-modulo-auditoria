@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import BotonRegresar from "../utiles/BotonRegresar";
 
 export const navigator = [
   {
@@ -15,7 +16,7 @@ export const navigator = [
   {
     id: 3,
     nombre: "Informes",
-    link: "/dashboard/informes",
+    link: "/dashboard/informes/init",
   },
   {
     id: 4,
@@ -38,6 +39,10 @@ const Navigation = () => {
           );
         })}
       </ul>
+      <br/>
+      <br/>
+      <br/>
+      <div><BotonRegresar/></div>
     </div>
   );
 };

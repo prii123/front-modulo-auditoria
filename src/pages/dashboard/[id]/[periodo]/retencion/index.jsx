@@ -2,6 +2,7 @@ import React from "react";
 import Layout from "../../../../../components/layout/Body";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import BotonRegresar from "../../../../../components/utiles/BotonRegresar";
 
 const retencion = [
   {
@@ -24,7 +25,7 @@ const index = () => {
 
   const path = router.asPath;
   return (
-    <Layout head={"MODULO DE RETENCION EN LA FUENTE"}>
+    <Layout head={"MODULO DE RETENCION EN LA FUENTE"} btnRegresar={<BotonRegresar/>}>
       <div className="row  row-cols-4">
         {retencion.map((pag) => {
           return (

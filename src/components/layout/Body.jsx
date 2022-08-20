@@ -15,7 +15,7 @@ const Body = ({ children, head }) => {
               className="bg bg-gradient "
               style={{ paddingTop: "5vh"}}
             >
-              <Navigation />
+              <Navigation  />
             </div>
           </div>
           <div className="col-sm-9 col-lg-9 m-0 p-0 ">

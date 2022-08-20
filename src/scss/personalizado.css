@@ -1,3 +1,98 @@
 .hover-cards:hover {
     background-color: #cbcbc7;
   }
+
+.btn-personalizado{
+  text-decoration: none;
+  display:inline-block;
+  /* width:40%; */
+  /* padding:20px; */
+  background: #737b83;
+  width:100%;
+  text-align: center;
+  color:white;
+  border-color: white;
+  font-size: 30px;
+  font-weight: bold;
+  transition: all 0.5s ease;
+  /* box-shadow: -5px 1px 3px 0px rgb(3, 3, 3); */
+  border-radius:60px 0px;
+}
+
+.btn-personalizado:hover{
+  background: #ffffff;
+    color:rgb(0, 0, 0);
+    box-shadow:none;
+    border-radius: 0px;
+    border: 0px;
+}
+
+.input-personalizado{
+  padding: 11px;
+  font-size: 17px;
+  border-width: 1px;
+  border-color: #CCCCCC;
+  background-color: #FFFFFF;
+  color: #000000;
+  border-style: solid;
+  border-radius: 37px;
+  box-shadow: 23px 21px 13px rgba(66,66,66,.72);
+  text-shadow: 0px 0px 5px rgba(66,66,66,.75);
+}
+
+.input-personalizado:focus{
+  outline:none;
+}
+
+
+.scroll-container {
+  display: block;
+  max-height: 540px;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
+
+.scroll-container::-webkit-scrollbar {
+  width: 4px;     /* Tamaño del scroll en vertical */
+  height: 8px;    /* Tamaño del scroll en horizontal */
+ 
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+/* Cambiamos el fondo y agregamos una sombra cuando esté en hover */
+.scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #b3b3b3;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Cambiamos el fondo cuando esté en active */
+.scroll-container::-webkit-scrollbar-thumb:active {
+  background-color: #999999;
+}
+
+/* Ponemos un color de fondo y redondeamos las esquinas del track */
+.scroll-container::-webkit-scrollbar-track {
+  background: #e1e1e1;
+  border-radius: 4px;
+}
+
+/* Cambiamos el fondo cuando esté en active o hover */
+.scroll-container::-webkit-scrollbar-track:hover,
+.scroll-container::-webkit-scrollbar-track:active {
+background: #d4d4d4;
+}
+
+.caja1{
+  -webkit-transition: 0.5s linear;
+  transition: 0.5s linear;
+  transform: scale(.7);
+
+}
+.caja1:hover{
+  -webkit-transform: scale(.5);
+  transform: scale(5);
+}

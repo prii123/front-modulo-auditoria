@@ -6,8 +6,8 @@ import header from "./header";
 import footer from "./footer";
 import detalle from "./detalle";
 
-import img from "../../../public/ayc.jpg";
-const pdfInformeVisita = ({ data }) => {
+const pdfInformeVisita = ({ data, nombre }) => {
+
   let totalRetencion = 0;
 
   data.map((retencion) => {
@@ -29,10 +29,9 @@ const pdfInformeVisita = ({ data }) => {
 
   return (
     <div>
-      <button className="btn btn-primary" onClick={onClic}>
-        Visualizar
+      <button className="btn-personalizado" onClick={onClic}>
+        {nombre}
       </button>
-      <Image src={img} alt="item.title" width="400" height="300" />
     </div>
   );
 };

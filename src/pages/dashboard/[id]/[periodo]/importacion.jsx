@@ -6,14 +6,16 @@ import libs from "../../../../libs/util";
 import { useRouter } from "next/router";
 import cookie from "js-cookie";
 import * as XLSX from "xlsx";
+import Alert from "../../../../components/utiles/Alertas";
 
-const importacion = ({ data }) => {
+const importacion = ({ data, cantidades }) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const path = useRouter();
   const [datasend, setDatasend] = React.useState(false);
   const [documento, setDocumento] = React.useState([]);
   const [mensajeError, setMensajeError] = React.useState("");
   const [statusMenssage, setStatusMenssage] = React.useState(false);
+  const [mensajeColor, setMensajeColor] = React.useState("");
   const [documentoSeleccionado, setDocumentoSeleccionado] = React.useState(0);
   // console.log(path.asPath)
 
@@ -49,50 +51,60 @@ const importacion = ({ data }) => {
     if (documento[0]?.nit == undefined) {
       // console.log("error numero documento")
       setStatusMenssage(true);
-      setMensajeError("falta el Nit");
+      setMensajeColor("danger");
+      setMensajeError("Falta el Nit");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
-    } else if (documento[0]?.numeroDoc == undefined || documento[0]?.numeroDoc == '') {
+    } else if (
+      documento[0]?.numeroDoc == undefined ||
+      documento[0]?.numeroDoc == ""
+    ) {
       // console.log("error numero documento")
       setStatusMenssage(true);
-      setMensajeError("falta numero de documento");
+      setMensajeColor("danger");
+      setMensajeError("Falta numero de documento.");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
     } else if (documento[0]?.valorNeto == undefined) {
       setStatusMenssage(true);
-      setMensajeError("falta valor del documento");
+      setMensajeColor("danger");
+      setMensajeError("Falta valor del documento.");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
     } else if (documento[0]?.impuesto == undefined) {
       setStatusMenssage(true);
-      setMensajeError("falta valor del impuesto");
+      setMensajeError("Falta valor del impuesto.");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
     } else if (documento[0]?.reteFuente == undefined) {
       setStatusMenssage(true);
-      setMensajeError("falta valor de la retencion");
+      setMensajeColor("danger");
+      setMensajeError("Falta valor de la retencion.");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
     } else if (documento[0]?.reteIva == undefined) {
       setStatusMenssage(true);
-      setMensajeError("rete iva");
+      setMensajeColor("danger");
+      setMensajeError("Rete iva.");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
     } else if (documento[0]?.razonSocial == undefined) {
       setStatusMenssage(true);
-      setMensajeError("Falta la razon social");
+      setMensajeColor("danger");
+      setMensajeError("Falta la razon social.");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
     } else if (documentoSeleccionado == 0) {
       setStatusMenssage(true);
-      setMensajeError("Debes Elegir el tipo de Documento Fuente");
+      setMensajeColor("danger");
+      setMensajeError("Debes Elegir el tipo de Documento.");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
@@ -102,7 +114,7 @@ const importacion = ({ data }) => {
       const periodo = path.query?.periodo;
       const tipoDoc = documentoSeleccionado;
 
-      documento.map(async (daDoc) => {
+      documento.map(async (daDoc, key) => {
         const body = {
           idEmpresa: libs.convertirANumero(idEmpresa),
           nit: libs.convertirANumero(daDoc?.nit),
@@ -114,7 +126,7 @@ const importacion = ({ data }) => {
           impuesto: libs.convertirANumero(daDoc?.impuesto),
           reteFuente: libs.convertirANumero(daDoc?.reteFuente),
           reteIva: libs.convertirANumero(daDoc?.reteIva),
-          periodo: libs.convertirANumero(periodo),
+          periodo: periodo,
         };
 
         const resp = await axios({
@@ -125,47 +137,31 @@ const importacion = ({ data }) => {
           },
           data: body,
         });
-
-        // console.log(resp?.data);
+// console.log(key+1)
       });
 
       setStatusMenssage(true);
+      setMensajeColor("success");
       setMensajeError("Se Cargo con exito");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
+      // path.reload();
     }
   };
 
   return (
     <Layout head={<div>IMPORTACION DE DATOS</div>}>
-      <a
-        className="pe-auto text-decoration-none"
-        onClick={() => window.history.back()}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="26"
-          height="26"
-          fill="currentColor"
-          className="bi bi-skip-backward"
-          viewBox="0 0 16 16"
-        >
-          <path d="M.5 3.5A.5.5 0 0 1 1 4v3.248l6.267-3.636c.52-.302 1.233.043 1.233.696v2.94l6.267-3.636c.52-.302 1.233.043 1.233.696v7.384c0 .653-.713.998-1.233.696L8.5 8.752v2.94c0 .653-.713.998-1.233.696L1 8.752V12a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5zm7 1.133L1.696 8 7.5 11.367V4.633zm7.5 0L9.196 8 15 11.367V4.633z" />
-        </svg>
-        &nbsp;&nbsp;&nbsp;Regresar
-      </a>
-      <br />
-      <br />
-
-      <div className="list-group">
+      {statusMenssage && <Alert descripcion={mensajeError} color={mensajeColor} />}
+      
+      <div className="row">
         {data &&
           data.map((doc) => {
-            // console.log(doc);   path + "/" + doc.id
+            // console.log(doc);   path + "/" + doc.id  cantidades
             return (
-              <div className="form-check form-check-inline" key={doc.id}>
+              <div className={`col-3 hover-cards  p-0`} key={doc.id}>
                 <input
-                  className="form-check-input"
+                  className={`form-check-input ${cantidades.find(valores=> valores.id == doc.id).cantidad > 0 ? 'bg-success' : 'none'}`}
                   type="radio"
                   name="flexRadioDefault"
                   id="flexRadioDefault1"
@@ -180,22 +176,15 @@ const importacion = ({ data }) => {
           })}
       </div>
 
-      {statusMenssage && (
-        <>
-          <div className="alert alert-danger" role="alert">
-            {mensajeError}
-          </div>
-        </>
-      )}
-
       <br />
+     
 
       <div className="card" style={{ width: "100%" }}>
-        <a className="pe-auto text-decoration-none" onClick={guardarDatosBD}>
+        <button className="btn hover-cards" onClick={guardarDatosBD}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width={16}
-            height={16}
+            width={26}
+            height={26}
             fill="currentColor"
             className="bi bi-cloud-download"
             viewBox="0 0 16 16"
@@ -204,8 +193,8 @@ const importacion = ({ data }) => {
             <path d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z" />
           </svg>
           &nbsp;&nbsp;&nbsp;Guarda los datos
-        </a>
-        <br />
+        </button>
+
         {documento && documento.length}
         <div className="card-body">
           <div className="mb-3">
@@ -229,7 +218,10 @@ const importacion = ({ data }) => {
             />
           </div>
           <div>
-            <table className="table table-bordered" style={{fontSize: '.9rem'}}>
+            <table
+              className="table table-bordered"
+              style={{ fontSize: ".9rem" }}
+            >
               <thead>
                 <tr>
                   <th scope="col">Nit</th>
@@ -244,22 +236,19 @@ const importacion = ({ data }) => {
               </thead>
               <tbody className="table-group-divider">
                 {documento?.map((doc, key) => {
-                  return(
-                    <tr key={key}>
-                        <td>{libs.convertirANumero(doc?.nit) }</td>
-                        <td>{doc?.razonSocial}</td>
-                        <td>{libs.convertirANumero(doc?.numeroDoc)}</td>
-                        <td>{doc?.numeroFE}</td>
-                        <td>{libs.convertirANumero(doc?.valorNeto)}</td>
-                        <td>{libs.convertirANumero(doc?.impuesto)}</td>
-                        <td>{libs.convertirANumero(doc?.reteFuente)}</td>
-                        <td>{libs.convertirANumero(doc?.reteIva)}</td>
-                      </tr>
-                  )
-                }
-                      
-                    )
-                  }
+                  return (
+                    <tr key={key} className="hover-cards">
+                      <td>{libs.convertirANumero(doc?.nit)}</td>
+                      <td>{doc?.razonSocial}</td>
+                      <td>{libs.convertirANumero(doc?.numeroDoc)}</td>
+                      <td>{doc?.numeroFE}</td>
+                      <td>{libs.convertirANumero(doc?.valorNeto)}</td>
+                      <td>{libs.convertirANumero(doc?.impuesto)}</td>
+                      <td>{libs.convertirANumero(doc?.reteFuente)}</td>
+                      <td>{libs.convertirANumero(doc?.reteIva)}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -272,6 +261,8 @@ const importacion = ({ data }) => {
 export async function getServerSideProps(ctx) {
   // console.log(ctx)
   const token = ctx?.req?.cookies?.__session;
+  const idEmpresa = ctx?.query.id;
+  const periodo = ctx?.query.periodo;
   const resp = await axios({
     method: "get",
     url: libs.location() + "api/tipodocumento",
@@ -280,9 +271,19 @@ export async function getServerSideProps(ctx) {
     },
   });
 
+  const cant = await axios({
+    method: "get",
+    url: libs.location() + `api/numero-por-cada-documento/${idEmpresa}/${periodo}`,
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
+
+  const cantidades = cant.data;
+
   const json = resp.data;
 
-  return { props: { data: json } };
+  return { props: { data: json, cantidades } };
 }
 
 export default importacion;

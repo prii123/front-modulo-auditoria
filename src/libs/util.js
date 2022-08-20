@@ -7,11 +7,13 @@ const ayudas = {
     // expresion regular que valida solo numeros
     var ExpRegSoloNumeros = "^[0-9]+$";
 
-   
+    if (!isNaN(cadena)) {
+      return cadena;
+    } else {
       // array vacio donde se almacenaran los valores numericos
       var array = [];
       // toma la cadena y hace un ciclo
-      for (var i = 0; i < cadena.length; i++) {
+      for (var i = 0; i < cadena?.length; i++) {
         //valida si es numero lo agrega al array vacio
         if (cadena[i].match(ExpRegSoloNumeros) != null) {
           array.push(cadena[i]);
@@ -22,8 +24,8 @@ const ayudas = {
       // remplazo todas las comas que se generarn por el metodo toString
       const str1 = cadena2?.replace(/,/g, "");
       //retorno la cadena antes convirtiendola en un Integer
-      return parseInt(str1) || 0;
-    
+      return parseInt(str1);
+    }
   },
 
   formatFecha(hoy) {
@@ -36,12 +38,25 @@ const ayudas = {
     //console.log(formato1);
     return formato1;
   },
+  meses(mes){
+    let listaMes = {
+      1:"Enero", 7:"Julio",
+      2:"Febrero", 8:"Agosto",
+      3:"Marzo", 9:"Septiembre",
+      4:"Abril", 10:"Octubre",
+      5:"Mayo", 11:"Noviembre",
+      6:"Junio", 12:"Diciembre",
+    }
+
+    return listaMes[mes]
+  },
   formatFechaLarga(hoy) {
     let mesLetras = "";
 
     let dia = hoy.getDay();
     let mes = hoy.getMonth() + 1;
     let agnio = hoy.getFullYear();
+
 
     switch (mes) {
       case 1:
@@ -97,5 +112,8 @@ const ayudas = {
   location() {
     return "http://localhost:4000/";
   },
+  principalPage(){
+    return "dashboard"
+  }
 };
 export default ayudas;

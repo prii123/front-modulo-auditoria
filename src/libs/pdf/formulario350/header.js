@@ -1,32 +1,37 @@
+import logo from "./logos/logo";
+import logo2 from "./logos/logo2"
 const header = (doc, data) => {
   let startY = 5;
   //configuracion de letra e imagen
-  const logoDian =
-    "https://res.cloudinary.com/dz7jl3nbg/image/upload/v1659802042/AyC/logo_dian_d4plsf.jpg";
-  const logoFormulario =
-    "https://res.cloudinary.com/dz7jl3nbg/image/upload/v1659802042/AyC/logoFormulario.jpg";
+  logo(doc)
+  logo2(doc)
+  
+
   doc.setFont("helvetica", "normal");
   doc.setFontSize(11);
   doc.setDrawColor("#9DB49C", 0, 0);
+
+  const fecha = data.periodo.split("-")
 
   // console.log(doc.getFontList())
 
   //lineas Horizontales
   doc.line(10, 10, 200, 10);
-  doc.addImage(logoDian, "JPEG", 10, 12, 46, 14, "medium");
+  
+  // doc.addImage('../../../public/ayc.jpg', "JPEG", 10, 12, 46, 14, "medium");
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10);
   doc.text("Declaracion de Retencion en la Fuente", 65, 20);
   doc.setFontSize(11);
   doc.setFont("helvetica", "normal");
-
-  doc.addImage(logoFormulario, "JPEG", 163, 12, 36, 14, "medium");
+ 
+  // doc.addImage(logoFormulario, "JPEG", 163, 12, 36, 14, "medium");
 
   //año de la retencion
   doc.setFontSize(8);
   doc.text("1. Año ", 13, 32);
   doc.setFontSize(11);
-  doc.text("2022", 28, 32); // año que se practica la retencion   &&&&&&&&&&&
+  doc.text(fecha[0], 28, 32); // año que se practica la retencion   &&&&&&&&&&&
   doc.line(26, 27, 46, 27); //linea horizontal
   doc.line(26, 27, 26, 33); // vertical
   doc.line(26, 33, 46, 33); // linea horizontal
@@ -36,7 +41,7 @@ const header = (doc, data) => {
   doc.setFontSize(8);
   doc.text("3. Periodo ", 75, 32);
   doc.setFontSize(11);
-  doc.text(data?.periodo.toString(), 95, 32); // periodo que se practica la retencion  &&&&&&&&&&&
+  doc.text(fecha[1], 95, 32); // periodo que se practica la retencion  &&&&&&&&&&&
   doc.line(90, 27, 103, 27); // horizontal
   doc.line(103, 27, 103, 33); // vertical
   doc.line(90, 33, 103, 33); // horizontal

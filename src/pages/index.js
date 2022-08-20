@@ -1,13 +1,13 @@
-import Layout from "../components/layout/Body";
-import libs from '../libs/util'
+import { useRouter } from "next/router";
 const Home = () => {
 
-  // const chars = "1lsf2dbd3sdl.,kdnf4.,5sdfgfbg,j,*/n.,6789"
-
-  // console.log(libs.convertirANumero(chars))
+  const router = useRouter();
+  const hanleClick = ()=>{
+    router.replace('/login') // bg-dark vw-100 vh-100
+  }
   return (
-    <div>
-      <h1>holaaa</h1>
+    <div className="" style={{backgroundColor: '#000000', display: 'grid', placeContent: 'center', height: '100vh'}}>
+      <button onClick={hanleClick} className=" caja1 btn w-100 h-100 fs-1 fw-bold" style={{backgroundColor: '#000000', border: 'none'}}>Login</button>
     </div>
   );
 };

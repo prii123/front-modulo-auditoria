@@ -1,5 +1,5 @@
 import newPage from "../newPage";
-const hallazgos = (doc, startY, hallazgo) => {
+const hallazgos = (doc, startY, hallazgo, hallazgosGenerales) => {
   //configuracion del documento
   doc.setFont("courier", "normal");
   doc.setFontSize(11);
@@ -8,7 +8,8 @@ const hallazgos = (doc, startY, hallazgo) => {
   doc.text("SECCION DE HALLAZGOS Y PROCEDIMIENTO A SEGUIR :", 10, startY);
   doc.setFont("courier", "normal");
   startY += 10;
-  hallazgo.map(async (hall) => {
+
+  hallazgo.map(async (hall, key) => {
     //configuracion del documento
     doc.setFontSize(11);
     doc.setFont("courier", "normal");
@@ -23,7 +24,10 @@ const hallazgos = (doc, startY, hallazgo) => {
     );
     doc.setFont("courier", "bold");
     doc.text(
-      "Tipo de documento: " +
+      key +
+        1 +
+        ") " +
+        "Tipo de documento: " +
         hall?.nombre.toUpperCase() +
         " numero " +
         hall?.numeroDoc,
@@ -42,23 +46,47 @@ const hallazgos = (doc, startY, hallazgo) => {
     doc.text(accionCorrectiva, 10, startY);
     startY += 5 * accionCorrectiva.length;
 
-    doc.setFontSize(8);
+    doc.setFontSize(7);
     doc.text("hallazgo creado en: " + hall?.created_at, 10, startY);
 
     startY += 10;
   });
 
-  // console.log(startY)
 
-  //   const pageHeight = doc.internal.pageSize.height;
-  //   console.log(pageHeight)
 
-  // body.documentos.forEach((element) => {
-  //   doc.text(doc.nombre, 10, startY);
-  //   startY += 5;
-  // });
+
+
+
 
   startY += 5;
+
+  doc.setFont("courier", "bold");
+  doc.setFontSize(11);
+  doc.text("ANOTACIONES GENERALES", 10, startY);
+  startY += 10;
+  doc.setFont("courier", "normal");
+
+
+
+
+  hallazgosGenerales?.map(async (hal, key) => {
+    //configuracion del documento
+    doc.setFontSize(11);
+    doc.setFont("courier", "normal");
+
+    startY = newPage(doc, startY, 40);
+
+    let hallazgo = doc.splitTextToSize(hal?.hallazgo, 180);
+// (key + 1) + ") " + 
+doc.text((key + 1)+ ")", 10, startY);
+    doc.text(hallazgo, 15, startY);
+    startY += 5 * hallazgo.length;
+
+    doc.setFontSize(7);
+    doc.text("hallazgo creado en: " + hal?.created_at, 10, startY);
+
+    startY += 10;
+  });
 
   return startY;
 };
