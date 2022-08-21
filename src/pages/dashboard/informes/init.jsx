@@ -212,6 +212,15 @@ export async function getServerSideProps(ctx) {
     },
   });
 
+  const hallazgosGenerales = await axios({
+    method: "get",
+    url:
+      libs.location() + "api/hallazgos-generales/" + idEmpresa + "/" + periodo,
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
+
   const info = JSON.stringify({ 
     head: {
       fecha: libs.formatFechaLarga(new Date()),
@@ -226,6 +235,7 @@ export async function getServerSideProps(ctx) {
       documentos: res.data,
     },
     hallazgo: hallazgos?.data,
+    hallazgosGenerales: hallazgosGenerales?.data
   });
   // console.log(info);
 
