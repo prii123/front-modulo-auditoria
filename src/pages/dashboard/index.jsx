@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import Layout from "../../components/layout/Body";
-import axios from "axios";
-import libs from "../../libs/util";
 import { myGet } from "../../libs/fetchApi";
-
 import Alerta from "../../components/utiles/Alertas";
 
 const index = ({ people }) => {
@@ -20,13 +16,13 @@ const index = ({ people }) => {
       {JSON.stringify(people[0]?.email)}
       <br />
 
-      {alert && <Alerta descripcion={"test"} color="success" />}
+      {alert && <Alerta descripcion={"este es un mensaje de pruebas"} color="alert-green" />}
 
       <button onClick={()=>{
         setAlert(true)
-        setTimeout(() => {
-          setAlert(false)
-        }, 1000)
+        // setTimeout(() => {
+        //   setAlert(false)
+        // }, 1000)
       }}>test</button>
     </Layout>
   );

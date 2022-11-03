@@ -17,6 +17,8 @@ const importacion = ({ data, cantidades }) => {
   const [statusMenssage, setStatusMenssage] = React.useState(false);
   const [mensajeColor, setMensajeColor] = React.useState("");
   const [documentoSeleccionado, setDocumentoSeleccionado] = React.useState(0);
+
+  const [numeroProgress, setNumeroProgress] = React.useState(0);
   // console.log(path.asPath)
 
   const auhtCook = cookie.get("__session");
@@ -46,8 +48,9 @@ const importacion = ({ data, cantidades }) => {
   };
 
   // console.log(cookie.get('__session'))
+  // console.log(documento.length)
 
-  const guardarDatosBD = () => {
+  const guardarDatosBD = async () => {
     if (documento[0]?.nit == undefined) {
       // console.log("error numero documento")
       setStatusMenssage(true);
@@ -114,46 +117,70 @@ const importacion = ({ data, cantidades }) => {
       const periodo = path.query?.periodo;
       const tipoDoc = documentoSeleccionado;
 
-      documento.map(async (daDoc, key) => {
+      const documentos = []
+
+
+      for (let i=0; i<= documento.length; i++){
         const body = {
           idEmpresa: libs.convertirANumero(idEmpresa),
-          nit: libs.convertirANumero(daDoc?.nit),
-          razonSocial: daDoc?.razonSocial,
+          nit: libs.convertirANumero(documento[i]?.nit),
+          razonSocial: documento[i]?.razonSocial,
           tipoDoc: libs.convertirANumero(tipoDoc),
-          numeroDoc: libs.convertirANumero(daDoc?.numeroDoc),
-          numeroFE: daDoc?.numeroFE,
-          valorNeto: libs.convertirANumero(daDoc?.valorNeto),
-          impuesto: libs.convertirANumero(daDoc?.impuesto),
-          reteFuente: libs.convertirANumero(daDoc?.reteFuente),
-          reteIva: libs.convertirANumero(daDoc?.reteIva),
+          numeroDoc: libs.convertirANumero(documento[i]?.numeroDoc),
+          numeroFE: documento[i]?.numeroFE,
+          valorNeto: libs.convertirANumero(documento[i]?.valorNeto),
+          impuesto: libs.convertirANumero(documento[i]?.impuesto),
+          reteFuente: libs.convertirANumero(documento[i]?.reteFuente),
+          reteIva: libs.convertirANumero(documento[i]?.reteIva),
           periodo: periodo,
         };
 
+        documentos.push(body)
+        var valorCargado = Math.round((100*(i+1))/documento.length);
+        setNumeroProgress(valorCargado);
+      }
+
+      // documento.map(async (daDoc, key) => {
+      //   const body = {
+      //     idEmpresa: libs.convertirANumero(idEmpresa),
+      //     nit: libs.convertirANumero(daDoc?.nit),
+      //     razonSocial: daDoc?.razonSocial,
+      //     tipoDoc: libs.convertirANumero(tipoDoc),
+      //     numeroDoc: libs.convertirANumero(daDoc?.numeroDoc),
+      //     numeroFE: daDoc?.numeroFE,
+      //     valorNeto: libs.convertirANumero(daDoc?.valorNeto),
+      //     impuesto: libs.convertirANumero(daDoc?.impuesto),
+      //     reteFuente: libs.convertirANumero(daDoc?.reteFuente),
+      //     reteIva: libs.convertirANumero(daDoc?.reteIva),
+      //     periodo: periodo,
+      //   };
+
+      //   documentos.push(body)
+      //   var valorCargado = Math.round((100*(key+1))/documento.length);
+      //   setNumeroProgress(valorCargado);
+
+      // });
+
         const resp = await axios({
           method: "post",
-          url: libs.location() + "api/documento",
+          url: libs.location() + "api/documento-masivo",
           headers: {
             authorization: `Bearer ${auhtCook}`,
           },
-          data: body,
+          data: documentos,
         });
-// console.log(key+1)
-      });
 
-      setStatusMenssage(true);
-      setMensajeColor("success");
-      setMensajeError("Se Cargo con exito");
-      setTimeout(() => {
-        setStatusMenssage(false);
-      }, 2000);
-      // path.reload();
+        console.log(resp.data);
+
+
     }
   };
 
   return (
     <Layout head={<div>IMPORTACION DE DATOS</div>}>
-      {statusMenssage && <Alert descripcion={mensajeError} color={mensajeColor} />}
-      
+      {statusMenssage && (
+        <Alert descripcion={mensajeError} color={mensajeColor} />
+      )}
       <div className="row">
         {data &&
           data.map((doc) => {
@@ -161,7 +188,12 @@ const importacion = ({ data, cantidades }) => {
             return (
               <div className={`col-3 hover-cards  p-0`} key={doc.id}>
                 <input
-                  className={`form-check-input ${cantidades.find(valores=> valores.id == doc.id).cantidad > 0 ? 'bg-success' : 'none'}`}
+                  className={`form-check-input ${
+                    cantidades.find((valores) => valores.id == doc.id)
+                      .cantidad > 0
+                      ? "bg-success"
+                      : "none"
+                  }`}
                   type="radio"
                   name="flexRadioDefault"
                   id="flexRadioDefault1"
@@ -177,7 +209,6 @@ const importacion = ({ data, cantidades }) => {
       </div>
 
       <br />
-     
 
       <div className="card" style={{ width: "100%" }}>
         <button className="btn hover-cards" onClick={guardarDatosBD}>
@@ -218,6 +249,19 @@ const importacion = ({ data, cantidades }) => {
             />
           </div>
           <div>
+            <div className="progress">
+              <div
+                className="progress-bar"
+                role="progressbar"
+                aria-valuenow={numeroProgress}
+                aria-valuemin="0"
+                aria-valuemax="100"
+                style={{ width: numeroProgress+'%', backgroundColor: '#f5a745' }}
+              >
+                {numeroProgress}%
+              </div>
+            </div>
+
             <table
               className="table table-bordered"
               style={{ fontSize: ".9rem" }}
@@ -273,7 +317,8 @@ export async function getServerSideProps(ctx) {
 
   const cant = await axios({
     method: "get",
-    url: libs.location() + `api/numero-por-cada-documento/${idEmpresa}/${periodo}`,
+    url:
+      libs.location() + `api/numero-por-cada-documento/${idEmpresa}/${periodo}`,
     headers: {
       authorization: `Bearer ${token}`,
     },

@@ -1,8 +1,10 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Layout from "../../../components/layout/Body";
 import cookie from "js-cookie";
 import libs from '../../../libs/util'
 import axios from "axios";
+import Alerta from "../../../components/utiles/Alertas";
+
 const crear = () => {
   const token = cookie.get("__session");
   const [nit, setNit] = useState("")
@@ -11,35 +13,71 @@ const crear = () => {
   const [direccion, setDireccion] = useState("")
   const [ciudad, setCiudad] = useState("")
 
-  const guardarDatos = async() => {
-    if(nit != null && dv != null && razonSocial != null && direccion != null && ciudad != null){
-   
-        const docBody = {
-          nit: parseInt(nit),
-          digitoVerificacion: parseInt(dv),
-          razonSocial,
-          direccion,
-          ciudad
-        }
-        // console.log(docBody)
-        const incertarEmpresa = await axios({
-          method: "post",
-          url: libs.location() + "api/empresa",
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-          data: docBody,
-        });
+  const [alert, setAlert] = useState(false);
+  const [descripcion, setDescripcion] = useState("");
+  const [color, setColor] = useState("");
 
-        if(incertarEmpresa?.data.affectedRows){
-          window.location.reload()
-        }
-       
-    
-    }else{
-      console.log("debe llenar todos los campos")
+  const guardarDatos = async () => {
+    if (nit != null && dv != null && razonSocial != null && direccion != null && ciudad != null) {
+
+      const docBody = {
+        nit: parseInt(nit),
+        digitoVerificacion: parseInt(dv),
+        razonSocial,
+        direccion,
+        ciudad
+      }
+      // console.log(docBody)
+      const incertarEmpresa = await axios({
+        method: "post",
+        url: libs.location() + "api/empresa",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        data: docBody,
+      });
+
+      if (incertarEmpresa?.data.affectedRows) {
+        setAlert(true);
+        setDescripcion("Usuario creado Exitosamente.");
+        setColor("alert-green");
+        limpiar();
+
+        setTimeout(() => {
+          setAlert(false);
+          setDescripcion("");
+          setColor("");
+        }, 1000);
+      }
+
+
+    } else {
+      setAlert(true);
+      setDescripcion("Todos los campos deben estar completos.");
+      setColor("alert-red");
+
+
+      setTimeout(() => {
+        setAlert(false);
+        setDescripcion("");
+        setColor("");
+      }, 1000);
     }
   };
+
+  const limpiar = () => {
+    let nit = document.getElementById('nit')
+    let dv = document.getElementById('dv')
+    let razonSocial = document.getElementById('razonSocial')
+    let direccion = document.getElementById('direccion')
+    let ciudad = document.getElementById('ciudad')
+
+    nit.value = ''
+    dv.value = ''
+    razonSocial.value = ''
+    direccion.value = ''
+    ciudad.value = ''
+  }
 
 
   return (
@@ -54,8 +92,8 @@ const crear = () => {
               <input
                 htmlFor="nit"
                 className="form-control hover-cards"
-                id="staticEmail"
-                onChange={(e)=>setNit(e.target.value)}
+                id="nit"
+                onChange={(e) => setNit(e.target.value)}
               />
             </div>
 
@@ -67,7 +105,7 @@ const crear = () => {
                 htmlFor="dv"
                 className="form-control hover-cards"
                 id="dv"
-                onChange={(e)=>setDv(e.target.value)}
+                onChange={(e) => setDv(e.target.value)}
               />
             </div>
           </div>
@@ -81,7 +119,7 @@ const crear = () => {
                 htmlFor="razonSocial"
                 className="form-control hover-cards"
                 id="razonSocial"
-                onChange={(e)=>setRazonSocial(e.target.value)}
+                onChange={(e) => setRazonSocial(e.target.value)}
               />
             </div>
           </div>
@@ -95,7 +133,7 @@ const crear = () => {
                 htmlFor="direccion"
                 className="form-control hover-cards"
                 id="direccion"
-                onChange={(e)=>setDireccion(e.target.value)}
+                onChange={(e) => setDireccion(e.target.value)}
               />
             </div>
           </div>
@@ -109,7 +147,7 @@ const crear = () => {
                 htmlFor="ciudad"
                 className="form-control hover-cards"
                 id="ciudad"
-                onChange={(e)=>setCiudad(e.target.value)}
+                onChange={(e) => setCiudad(e.target.value)}
               />
             </div>
           </div>
@@ -118,6 +156,10 @@ const crear = () => {
             <button className="btn btn-primary" onClick={guardarDatos}>
               Guardar
             </button>
+
+            {alert && (
+            <Alerta descripcion={descripcion} color={color} />
+          )}
           </div>
         </div>
       </>

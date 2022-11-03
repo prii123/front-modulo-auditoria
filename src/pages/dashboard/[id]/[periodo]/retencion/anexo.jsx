@@ -7,34 +7,34 @@ import { useRouter } from "next/router";
 import Alert from '../../../../../components/utiles/Alertas'
 
 const retencion = ({ tipoRetencion, retenciones, retencionesGuardadas }) => {
- 
-const router = useRouter(); 
-const [mensajeError, setMensajeError] = React.useState("");
-const [statusMenssage, setStatusMenssage] = React.useState(false);
-const [mensajeColor, setMensajeColor] = React.useState("");
 
-const hanleClieckAgregarOtrasRtetenciones = () =>{
-  const id = router?.query?.id
-  const periodo = router?.query?.periodo;
+  const router = useRouter();
+  const [mensajeError, setMensajeError] = React.useState("");
+  const [statusMenssage, setStatusMenssage] = React.useState(false);
+  const [mensajeColor, setMensajeColor] = React.useState("");
 
-  router.push(`/${libs.principalPage()}/${id}/${periodo}/retencion/agregarotrasretenciones`)
-}
+  const hanleClieckAgregarOtrasRtetenciones = () => {
+    const id = router?.query?.id
+    const periodo = router?.query?.periodo;
 
-const agregarTablaDeRetencion = async(e) =>{
+    router.push(`/${libs.principalPage()}/${id}/${periodo}/retencion/agregarotrasretenciones`)
+  }
+
+  const agregarTablaDeRetencion = async (e) => {
     const token = cookie.get('__session');
 
     let idDocumento = parseInt(e.target.parentNode.parentNode.parentNode.parentNode.parentNode.childNodes[0].innerText)
     // console.log(idDocumento)
     const id_tipo_retencion = parseInt(e.target.value);
-    let documento = retenciones.find(valor =>  valor.id == idDocumento);
+    let documento = retenciones.find(valor => valor.id == idDocumento);
     // console.log(documento)
     let idEmpresa = documento?.idEmpresa;
     let periodo = documento?.periodo;
     let base = documento?.valorNeto;
     let valor = documento?.reteFuente;
 
-    if(id_tipo_retencion && idEmpresa && idDocumento && periodo && base && valor){
-      let datos ={
+    if (id_tipo_retencion && idEmpresa && idDocumento && periodo && base && valor) {
+      let datos = {
         id_tipo_retencion,
         idEmpresa,
         idDocumento,
@@ -54,7 +54,7 @@ const agregarTablaDeRetencion = async(e) =>{
         data: datos
       });
 
-      if(tipoRetencion.data.affectedRows > 0){
+      if (tipoRetencion.data.affectedRows > 0) {
         // router.reload();
         // console.log(tipoRetencion) 
         setStatusMenssage(true);
@@ -63,7 +63,7 @@ const agregarTablaDeRetencion = async(e) =>{
         setTimeout(() => {
           setStatusMenssage(false);
         }, 2000);
-      }else{
+      } else {
         console.log('hubo un error')
         setStatusMenssage(true);
         setMensajeColor("danger");
@@ -72,15 +72,24 @@ const agregarTablaDeRetencion = async(e) =>{
           setStatusMenssage(false);
         }, 2000);
       }
-      
-      
     }
+  }
 
-    
+  const borrarElemento = async (e) => {
+    // console.log(e.target.value)
 
-    // console.log(documento)
+    const token = cookie.get('__session');
+    const tipoRetencion = await axios({
+      method: "delete",
+      url: libs.location() + "api/detalle-retencion/" + e.target.value,
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
 
-
+    if(tipoRetencion.status == 200){
+      router.reload()
+    }
   }
   return (
     <Layout head={"ANEXO DE LA DECLARACION DE RETENCION EN LA FUENTE"}>
@@ -98,6 +107,8 @@ const agregarTablaDeRetencion = async(e) =>{
               <th scope="col">RETENCION</th>
               <th scope="col">porciento%</th>
               <th scope="col">TIPO</th>
+              <th scope="col"></th>
+
             </tr>
           </thead>
           <tbody className="table-group-divider" style={{ fontSize: ".9rem" }}>
@@ -109,12 +120,12 @@ const agregarTablaDeRetencion = async(e) =>{
                     <td className="text-end">{ret.nit}</td>
                     <td>{ret.razonSocial}</td>
                     <td>{ret.numeroDoc}</td>
-                    <td className="text-end">{libs.formatNumber(ret.valorNeto) }</td>
-                    <td className="text-end">{libs.formatNumber(ret.reteFuente) }</td>
+                    <td className="text-end">{libs.formatNumber(ret.valorNeto)}</td>
+                    <td className="text-end">{libs.formatNumber(ret.reteFuente)}</td>
                     <td className="text-end">
                       {libs.formatNumber(Number.parseFloat(
                         (ret.reteFuente / ret.valorNeto) * 100
-                      ).toFixed(2))  + " %"}
+                      ).toFixed(2)) + " %"}
                     </td>
                     <td>
                       <div className="row g-2">
@@ -142,6 +153,12 @@ const agregarTablaDeRetencion = async(e) =>{
                       </div>
                     </td>
                     <td>{retencionesGuardadas.find(retencion => retencion.idDocumento == ret.id)?.concepto ? retencionesGuardadas.find(retencion => retencion.idDocumento == ret.id)?.concepto : 'Vacio'}</td>
+                    <td>
+                      <button value={ret.id} onClick={(e) => borrarElemento(e)}>
+                        {/* <i className="bi bi-trash3-fill"></i> */}
+                        borrar
+                      </button>
+                    </td>
                   </tr>
                 );
               })}

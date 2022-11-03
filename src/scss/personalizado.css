@@ -1,33 +1,62 @@
 .hover-cards:hover {
-    background-color: #cbcbc7;
-  }
+  background-color: #cbcbc7;
+}
 
-.btn-personalizado{
+.btn-personalizado {
   text-decoration: none;
-  display:inline-block;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  color: #000000;
+  background-color: #ffffff;
+  border-bottom: solid 1px #adadad;
+  border-top: solid 1px #adadad;
+  border-left: none;
+  border-right: none;
+  /* border-color: #a6a6a6; */
+  padding: 5px;
+  font-size: 30px;
+  font-weight: bold;
+  transition: all 0.5s ease;
+  /* border-radius: 0px 0px; */
+}
+
+.btn-personalizado:hover {
+  background: #ffffff;
+  color: #00fc08;
+  /* box-shadow: none;
+  border-radius: 0px; */
+  border-top: solid 2px #00fc08;
+  border-bottom: solid 2px #00fc08;
+}
+
+
+.btn-personalizado1 {
+  text-decoration: none;
+  display: inline-block;
   /* width:40%; */
   /* padding:20px; */
   background: #737b83;
-  width:100%;
+  width: 100%;
   text-align: center;
-  color:white;
+  color: white;
   border-color: white;
   font-size: 30px;
   font-weight: bold;
   transition: all 0.5s ease;
   /* box-shadow: -5px 1px 3px 0px rgb(3, 3, 3); */
-  border-radius:60px 0px;
+  border-radius: 60px 0px;
 }
 
-.btn-personalizado:hover{
+.btn-personalizado1:hover {
   background: #ffffff;
-    color:rgb(0, 0, 0);
-    box-shadow:none;
-    border-radius: 0px;
-    border: 0px;
+  color: rgb(0, 0, 0);
+  box-shadow: none;
+  border-radius: 0px;
+  border: 0px;
 }
 
-.input-personalizado{
+.input-personalizado {
   padding: 11px;
   font-size: 17px;
   border-width: 1px;
@@ -36,12 +65,12 @@
   color: #000000;
   border-style: solid;
   border-radius: 37px;
-  box-shadow: 23px 21px 13px rgba(66,66,66,.72);
-  text-shadow: 0px 0px 5px rgba(66,66,66,.75);
+  box-shadow: 23px 21px 13px rgba(66, 66, 66, .72);
+  text-shadow: 0px 0px 5px rgba(66, 66, 66, .75);
 }
 
-.input-personalizado:focus{
-  outline:none;
+.input-personalizado:focus {
+  outline: none;
 }
 
 
@@ -53,9 +82,11 @@
 }
 
 .scroll-container::-webkit-scrollbar {
-  width: 4px;     /* Tamaño del scroll en vertical */
-  height: 8px;    /* Tamaño del scroll en horizontal */
- 
+  width: 4px;
+  /* Tamaño del scroll en vertical */
+  height: 8px;
+  /* Tamaño del scroll en horizontal */
+
 }
 
 .scroll-container::-webkit-scrollbar-thumb {
@@ -83,16 +114,42 @@
 /* Cambiamos el fondo cuando esté en active o hover */
 .scroll-container::-webkit-scrollbar-track:hover,
 .scroll-container::-webkit-scrollbar-track:active {
-background: #d4d4d4;
+  background: #d4d4d4;
 }
 
-.caja1{
+.caja1 {
   -webkit-transition: 0.5s linear;
   transition: 0.5s linear;
   transform: scale(.7);
 
 }
-.caja1:hover{
+
+.caja1:hover {
   -webkit-transform: scale(.5);
   transform: scale(5);
 }
+
+
+.alert-red {
+  background-color: #f80c0c2f;
+  border: 1px solid #ff0000;
+  color: #ff0000;
+}
+
+.alert-green {
+  background-color: #1cf80c2f;
+  border: 1px solid #00ff04;
+  color: #00ff04;
+}
+
+
+.alerta-personalizada {
+  margin-top: 50px;
+  text-align: center;
+  min-width: 300px;
+  max-width: 600px;
+
+  position: fixed;
+  left: 40%;
+}
+
