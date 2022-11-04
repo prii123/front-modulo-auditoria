@@ -10,7 +10,7 @@ import cookie from "js-cookie";
 const doc = ({documentosAuditar}) => {
   const Router = useRouter();
 
-
+// console.log(documentosAuditar)
 
   const [hallazgo, setHallazgo] = useState("");
   const [accionSeguir, setAccionSeguir] = useState("");
@@ -143,6 +143,8 @@ const doc = ({documentosAuditar}) => {
         onClose={() => {
           setModal("none");
           setHallazgoModal("");
+          setHallazgo("")
+          setAccionSeguir("")
         }}
         onSave={incertarHallazgos}
         onDelete={eliminarHalazgo}

@@ -47,14 +47,13 @@ const importacion = ({ data, cantidades }) => {
     });
   };
 
-  // console.log(cookie.get('__session'))
-  // console.log(documento.length)
+
 
   const guardarDatosBD = async () => {
     if (documento[0]?.nit == undefined) {
       // console.log("error numero documento")
       setStatusMenssage(true);
-      setMensajeColor("danger");
+      setMensajeColor("alert-red");
       setMensajeError("Falta el Nit");
       setTimeout(() => {
         setStatusMenssage(false);
@@ -65,14 +64,14 @@ const importacion = ({ data, cantidades }) => {
     ) {
       // console.log("error numero documento")
       setStatusMenssage(true);
-      setMensajeColor("danger");
+      setMensajeColor("alert-red");
       setMensajeError("Falta numero de documento.");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
     } else if (documento[0]?.valorNeto == undefined) {
       setStatusMenssage(true);
-      setMensajeColor("danger");
+      setMensajeColor("alert-red");
       setMensajeError("Falta valor del documento.");
       setTimeout(() => {
         setStatusMenssage(false);
@@ -85,28 +84,28 @@ const importacion = ({ data, cantidades }) => {
       }, 2000);
     } else if (documento[0]?.reteFuente == undefined) {
       setStatusMenssage(true);
-      setMensajeColor("danger");
+      setMensajeColor("alert-red");
       setMensajeError("Falta valor de la retencion.");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
     } else if (documento[0]?.reteIva == undefined) {
       setStatusMenssage(true);
-      setMensajeColor("danger");
+      setMensajeColor("alert-red");
       setMensajeError("Rete iva.");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
     } else if (documento[0]?.razonSocial == undefined) {
       setStatusMenssage(true);
-      setMensajeColor("danger");
+      setMensajeColor("alert-red");
       setMensajeError("Falta la razon social.");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
     } else if (documentoSeleccionado == 0) {
       setStatusMenssage(true);
-      setMensajeColor("danger");
+      setMensajeColor("alert-red");
       setMensajeError("Debes Elegir el tipo de Documento.");
       setTimeout(() => {
         setStatusMenssage(false);
@@ -120,7 +119,7 @@ const importacion = ({ data, cantidades }) => {
       const documentos = []
 
 
-      for (let i=0; i<= documento.length; i++){
+      for (let i=0; i< documento.length; i++){
         const body = {
           idEmpresa: libs.convertirANumero(idEmpresa),
           nit: libs.convertirANumero(documento[i]?.nit),
@@ -170,7 +169,14 @@ const importacion = ({ data, cantidades }) => {
           data: documentos,
         });
 
-        console.log(resp.data);
+
+
+        setStatusMenssage(true);
+        setMensajeColor("alert-green");
+        setMensajeError(JSON.parse(resp.data));
+        setTimeout(() => {
+          setStatusMenssage(false);
+        }, 2000);
 
 
     }
@@ -178,9 +184,7 @@ const importacion = ({ data, cantidades }) => {
 
   return (
     <Layout head={<div>IMPORTACION DE DATOS</div>}>
-      {statusMenssage && (
-        <Alert descripcion={mensajeError} color={mensajeColor} />
-      )}
+      
       <div className="row">
         {data &&
           data.map((doc) => {
@@ -225,6 +229,10 @@ const importacion = ({ data, cantidades }) => {
           </svg>
           &nbsp;&nbsp;&nbsp;Guarda los datos
         </button>
+
+        {statusMenssage && (
+        <Alert descripcion={mensajeError} color={mensajeColor} />
+      )}
 
         {documento && documento.length}
         <div className="card-body">
