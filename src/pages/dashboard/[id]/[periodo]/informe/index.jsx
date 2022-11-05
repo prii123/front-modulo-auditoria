@@ -47,14 +47,14 @@ const informe = () => {
 
     if(preparaInforme.data.message == 'OK'){
       setStatusMenssage(true);
-      setMensajeColor("success");
+      setMensajeColor("alert-green");
       setMensajeError("Informe Preparado.");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
     }else{
       setStatusMenssage(true);
-      setMensajeColor("danger");
+      setMensajeColor("alert-red");
       setMensajeError(JSON.stringify(preparaInforme.data.message));
       setTimeout(() => {
         setStatusMenssage(false);

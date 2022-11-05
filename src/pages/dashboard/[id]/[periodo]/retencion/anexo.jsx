@@ -58,15 +58,15 @@ const retencion = ({ tipoRetencion, retenciones, retencionesGuardadas }) => {
         // router.reload();
         // console.log(tipoRetencion) 
         setStatusMenssage(true);
-        setMensajeColor("success");
+        setMensajeColor("alert-green");
         setMensajeError("Agregado exitosamente.");
         setTimeout(() => {
           setStatusMenssage(false);
         }, 2000);
       } else {
-        console.log('hubo un error')
+        // console.log('hubo un error')
         setStatusMenssage(true);
-        setMensajeColor("danger");
+        setMensajeColor("alert-red");
         setMensajeError("Recarga la pagina, algo esta mal.");
         setTimeout(() => {
           setStatusMenssage(false);

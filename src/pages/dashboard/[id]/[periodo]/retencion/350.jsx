@@ -31,15 +31,16 @@ const [mensajeColor, setMensajeColor] = React.useState("");
     // console.log(totalRetencion)
     if(totalRetencion.data.message == 'OK'){
       setStatusMenssage(true);
-        setMensajeColor("success");
+        setMensajeColor("alert-green");
         setMensajeError("Actualizado exitosamente.");
         setTimeout(() => {
           setStatusMenssage(false);
+          router.reload()
         }, 2000);
     }else{
       setStatusMenssage(true);
-        setMensajeColor("Danger");
-        setMensajeError(JSON.stringify(totalRetencion.message));
+        setMensajeColor("alert-red");
+        setMensajeError('hubo un error');
         setTimeout(() => {
           setStatusMenssage(false);
         }, 2000);

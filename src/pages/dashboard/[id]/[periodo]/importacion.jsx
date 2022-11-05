@@ -3,7 +3,7 @@ import React from "react";
 import Layout from "../../../../components/layout/Body";
 import axios from "axios";
 import libs from "../../../../libs/util";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import cookie from "js-cookie";
 import * as XLSX from "xlsx";
 import Alert from "../../../../components/utiles/Alertas";
@@ -50,7 +50,7 @@ const importacion = ({ data, cantidades }) => {
 
 
   const guardarDatosBD = async () => {
-    if (documento[0]?.nit == undefined) {
+    if (documento[0]?.DocumentoCliente == undefined) {
       // console.log("error numero documento")
       setStatusMenssage(true);
       setMensajeColor("alert-red");
@@ -59,8 +59,8 @@ const importacion = ({ data, cantidades }) => {
         setStatusMenssage(false);
       }, 2000);
     } else if (
-      documento[0]?.numeroDoc == undefined ||
-      documento[0]?.numeroDoc == ""
+      documento[0]?.NumeroDoc == undefined ||
+      documento[0]?.NumeroDoc == ""
     ) {
       // console.log("error numero documento")
       setStatusMenssage(true);
@@ -69,34 +69,34 @@ const importacion = ({ data, cantidades }) => {
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
-    } else if (documento[0]?.valorNeto == undefined) {
+    } else if (documento[0]?.ValorNeto == undefined) {
       setStatusMenssage(true);
       setMensajeColor("alert-red");
       setMensajeError("Falta valor del documento.");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
-    } else if (documento[0]?.impuesto == undefined) {
+    } else if (documento[0]?.IVA == undefined) {
       setStatusMenssage(true);
       setMensajeError("Falta valor del impuesto.");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
-    } else if (documento[0]?.reteFuente == undefined) {
+    } else if (documento[0]?.ReteFuenteRenta == undefined) {
       setStatusMenssage(true);
       setMensajeColor("alert-red");
       setMensajeError("Falta valor de la retencion.");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
-    } else if (documento[0]?.reteIva == undefined) {
+    } else if (documento[0]?.ReteFuenteIVA == undefined) {
       setStatusMenssage(true);
       setMensajeColor("alert-red");
       setMensajeError("Rete iva.");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
-    } else if (documento[0]?.razonSocial == undefined) {
+    } else if (documento[0]?.NombredelCliente == undefined) {
       setStatusMenssage(true);
       setMensajeColor("alert-red");
       setMensajeError("Falta la razon social.");
@@ -122,15 +122,15 @@ const importacion = ({ data, cantidades }) => {
       for (let i=0; i< documento.length; i++){
         const body = {
           idEmpresa: libs.convertirANumero(idEmpresa),
-          nit: libs.convertirANumero(documento[i]?.nit),
-          razonSocial: documento[i]?.razonSocial,
+          nit: libs.convertirANumero(documento[i]?.DocumentoCliente),
+          razonSocial: documento[i]?.NombredelCliente,
           tipoDoc: libs.convertirANumero(tipoDoc),
-          numeroDoc: libs.convertirANumero(documento[i]?.numeroDoc),
-          numeroFE: documento[i]?.numeroFE,
-          valorNeto: libs.convertirANumero(documento[i]?.valorNeto),
-          impuesto: libs.convertirANumero(documento[i]?.impuesto),
-          reteFuente: libs.convertirANumero(documento[i]?.reteFuente),
-          reteIva: libs.convertirANumero(documento[i]?.reteIva),
+          numeroDoc: libs.convertirANumero(documento[i]?.NumeroDoc),
+          numeroFE: documento[i]?.NumeroFE,
+          valorNeto: libs.convertirANumero(documento[i]?.ValorNeto),
+          impuesto: libs.convertirANumero(documento[i]?.IVA),
+          reteFuente: libs.convertirANumero(documento[i]?.ReteFuenteRenta),
+          reteIva: libs.convertirANumero(documento[i]?.ReteFuenteIVA),
           periodo: periodo,
         };
 
@@ -173,9 +173,10 @@ const importacion = ({ data, cantidades }) => {
 
         setStatusMenssage(true);
         setMensajeColor("alert-green");
-        setMensajeError(JSON.parse(resp.data));
+        setMensajeError('guardado');
         setTimeout(() => {
           setStatusMenssage(false);
+          Router.reload()
         }, 2000);
 
 
@@ -290,14 +291,14 @@ const importacion = ({ data, cantidades }) => {
                 {documento?.map((doc, key) => {
                   return (
                     <tr key={key} className="hover-cards">
-                      <td>{libs.convertirANumero(doc?.nit)}</td>
-                      <td>{doc?.razonSocial}</td>
-                      <td>{libs.convertirANumero(doc?.numeroDoc)}</td>
-                      <td>{doc?.numeroFE}</td>
-                      <td>{libs.convertirANumero(doc?.valorNeto)}</td>
-                      <td>{libs.convertirANumero(doc?.impuesto)}</td>
-                      <td>{libs.convertirANumero(doc?.reteFuente)}</td>
-                      <td>{libs.convertirANumero(doc?.reteIva)}</td>
+                      <td>{libs.convertirANumero(doc?.DocumentoCliente)}</td>
+                      <td>{doc?.NombredelCliente}</td>
+                      <td>{libs.convertirANumero(doc?.NumeroDoc)}</td>
+                      <td>{doc?.NumeroFE}</td>
+                      <td>{libs.convertirANumero(doc?.ValorNeto)}</td>
+                      <td>{libs.convertirANumero(doc?.IVA)}</td>
+                      <td>{libs.convertirANumero(doc?.ReteFuenteRenta)}</td>
+                      <td>{libs.convertirANumero(doc?.ReteFuenteIVA)}</td>
                     </tr>
                   );
                 })}
