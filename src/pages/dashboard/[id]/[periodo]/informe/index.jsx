@@ -24,10 +24,10 @@ const informe = () => {
   const [mensajeColor, setMensajeColor] = React.useState("");
 
 
-  const hanleClieckAgregarOtrasRtetenciones = () =>{
+  const hanleClieckAgregarOtrasRtetenciones = () => {
     const id = router?.query?.id
     const periodo = router?.query?.periodo;
-  
+
     router.push(`/${libs.principalPage()}/${id}/${periodo}/informe/i-hallazgos`)
   }
 
@@ -36,7 +36,7 @@ const informe = () => {
       method: "get",
       url:
         libs.location() +
-        "api/prepara-informe-revision/" +
+        "/informes/preparar/" +
         idEmpresa +
         "/" +
         periodo,
@@ -45,17 +45,18 @@ const informe = () => {
       },
     });
 
-    if(preparaInforme.data.message == 'OK'){
+
+    if (preparaInforme.status == 200) {
       setStatusMenssage(true);
       setMensajeColor("alert-green");
       setMensajeError("Informe Preparado.");
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
-    }else{
+    } else {
       setStatusMenssage(true);
       setMensajeColor("alert-red");
-      setMensajeError(JSON.stringify(preparaInforme.data.message));
+      setMensajeError(JSON.stringify('Hay un error'));
       setTimeout(() => {
         setStatusMenssage(false);
       }, 2000);
@@ -67,8 +68,8 @@ const informe = () => {
     const res = await axios({
       method: "get",
       url:
-        libs.location() +
-        "api/consulta-informe-revision/" +
+        libs.location() + 
+        "/informes/consultar/" +
         idEmpresa +
         "/" +
         periodo,
@@ -77,10 +78,12 @@ const informe = () => {
       },
     });
 
+    // console.log(res)
+
     const hallazgos = await axios({
       method: "get",
       url:
-        libs.location() + "api/consulta-hallazgos/" + idEmpresa + "/" + periodo,
+        libs.location() + "/hallazgos/" + periodo + "/" + idEmpresa,
       headers: {
         authorization: `Bearer ${token}`,
       },
@@ -89,7 +92,7 @@ const informe = () => {
     const hallazgosGenerales = await axios({
       method: "get",
       url:
-        libs.location() + "api/hallazgos-generales/" + idEmpresa + "/" + periodo,
+        libs.location() + "/hallazgos/generales/" + periodo + "/" + idEmpresa,
       headers: {
         authorization: `Bearer ${token}`,
       },
@@ -102,7 +105,7 @@ const informe = () => {
       },
       asunto: {
         asunto: "REVISIÓN DE LA INFORMACIÓN CONTABLE",
-        delegado: res.data[0]?.username,
+        delegado: res.data[0]?.name,
       },
       body: {
         periodo: res.data[0]?.periodo,
@@ -124,7 +127,7 @@ const informe = () => {
       )}
 
       <button onClick={hanleClieckAgregarOtrasRtetenciones} className="btn">Agregar otras observaciónes</button>
-      <br/>
+      <br />
 
       <button className="btn btn-primary" onClick={preparar}>
         Prepara/Actualizar

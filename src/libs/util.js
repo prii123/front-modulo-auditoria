@@ -110,7 +110,7 @@ const ayudas = {
     return dia;
   },
   location() {
-    return "http://localhost:4000/";
+    return "http://localhost:4000";
   },
   principalPage(){
     return "dashboard"

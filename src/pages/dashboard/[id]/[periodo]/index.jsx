@@ -105,9 +105,9 @@ const index = ({ data }) => {
 
 export async function getServerSideProps(ctx) {
   const id = ctx?.query?.id;
-  const json = await myGet("api/empresa/" + id, ctx);
+  const json = await myGet("/empresas/" + id, ctx);
 
-  return { props: { data: json } };
+  return { props: { data: json?.data } };
 }
 
 export default index;

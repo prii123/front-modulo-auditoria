@@ -19,22 +19,22 @@ const auditoria = ({ data }) => {
         {data &&
           data.map((dato) => {
             return (
-              <div key={dato.id} className="p-4 col-sm-6 col-lg-4">
+              <div key={dato?.id} className="p-4 col-sm-6 col-lg-4">
                 <div className="card text-center ">
                   <div className="card-header">Tipo de documento fuente</div>
                   <div className="card-body">
                     <h5 className="card-title">
-                      <strong>{dato.nombre}</strong>
+                      <strong>{dato?.nombre}</strong>
                     </h5>
                     <Link
                       href="/dashboard/[id]/[periodo]/[doc]"
                       as={
                         "/dashboard/" +
-                        Router.query.id +
+                        Router?.query?.id +
                         "/" +
-                        Router.query.periodo +
+                        Router?.query?.periodo +
                         "/" +
-                        dato.id
+                        dato?.id
                       }
                     >
                       <a className="btn btn-primary">Empezar</a>
@@ -54,7 +54,7 @@ export async function getServerSideProps(ctx) {
   const token = ctx?.req?.cookies?.__session;
   const tiposDeDocumentos = await axios({
     method: "get",
-    url: libs.location() + "api/tipodocumento",
+    url: libs.location() + "/documentos/tipo-documentos",
     headers: {
       authorization: `Bearer ${token}`,
     },

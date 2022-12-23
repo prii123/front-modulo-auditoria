@@ -3,10 +3,10 @@ import libs from '../../util'
 const body = (doc, startY, body) => {
   let mesNumero = parseInt(body?.periodo?.split("-")[1]);
   let annio = body?.periodo?.split("-")[0];
-  let mesLetras = libs.meses(mesNumero);
+  let mesLetras = libs?.meses(mesNumero);
   doc.setFontSize(11);
   doc.text(
-    "AUDITORÍA DEL PROCESOS CONTABLE DEL PERIODO " + mesLetras.toUpperCase() + " DE " + annio,
+    "AUDITORÍA DEL PROCESOS CONTABLE DEL PERIODO " + mesLetras?.toUpperCase() + " DE " + annio,
     10,
     startY 
   );
@@ -19,7 +19,7 @@ const body = (doc, startY, body) => {
     doc.setFont('courier','normal');
 
     doc.setFont('courier','bold');
-    doc.text(documentosFuente?.nombre.toUpperCase(), 10, startY);
+    doc.text(documentosFuente?.nombre?.toUpperCase(), 10, startY);
     doc.setFont('courier','normal');
     startY += 7;
 

@@ -11,20 +11,24 @@ const hallazgos = ({ hallazgo, hallazgosGeneral }) => {
   const [hallazgoo, setHallazgoo] = useState("");
   const router = useRouter();
 
+  // console.log(hallazgo)
+  // console.log(hallazgosGeneral)
+
   const guardarHallazgo = async () => {
     const token = cookie.get("__session");
-    const idEmpresa = router?.query?.id;
+    const empresaId = router?.query?.id;
     const periodo = router?.query?.periodo;
 
     if (hallazgoo != "") {
       const data = {
         hallazgo: hallazgoo,
-        idEmpresa,
+        empresaId,
         periodo,
       };
+      // console.log(data)
       const hallazgos = await axios({
         method: "post",
-        url: libs.location() + "api/hallazgos-generales",
+        url: libs.location() + "/hallazgos",
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -50,7 +54,7 @@ const hallazgos = ({ hallazgo, hallazgosGeneral }) => {
             style={{ display: "grid", placeContent: "center" }}
           >
             <textarea
-            rows={5}
+              rows={5}
               className="border border-primary border-4"
               onChange={(e) => setHallazgoo(e.target.value)}
             />
@@ -134,7 +138,7 @@ export async function getServerSideProps(ctx) {
   const hallazgos = await axios({
     method: "get",
     url:
-      libs.location() + "api/consulta-hallazgos/" + idEmpresa + "/" + periodo,
+      libs.location() + "/hallazgos/" + periodo + "/" + idEmpresa,
     headers: {
       authorization: `Bearer ${token}`,
     },
@@ -143,7 +147,7 @@ export async function getServerSideProps(ctx) {
   const hallazgosGenerales = await axios({
     method: "get",
     url:
-      libs.location() + "api/hallazgos-generales/" + idEmpresa + "/" + periodo,
+      libs.location() + "/hallazgos/generales/" + periodo + "/" + idEmpresa,
     headers: {
       authorization: `Bearer ${token}`,
     },

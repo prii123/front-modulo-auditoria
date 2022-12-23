@@ -14,8 +14,8 @@ const index = ({ formulario350 }) => {
   const periodo = router.query.periodo;
 
   const [mensajeError, setMensajeError] = React.useState("");
-const [statusMenssage, setStatusMenssage] = React.useState(false);
-const [mensajeColor, setMensajeColor] = React.useState("");
+  const [statusMenssage, setStatusMenssage] = React.useState(false);
+  const [mensajeColor, setMensajeColor] = React.useState("");
 
 
   const onClic = async () => {
@@ -23,27 +23,27 @@ const [mensajeColor, setMensajeColor] = React.useState("");
       method: "get",
       url:
         libs.location() +
-        `api/preparar-total-retencion/${idEmpresa}/${periodo}`,
+        `/retencion-fuente/totales-retencion-actualizar/${idEmpresa}/${periodo}`,
       headers: {
         authorization: `Bearer ${token}`,
       },
     });
     // console.log(totalRetencion)
-    if(totalRetencion.data.message == 'OK'){
+    if (totalRetencion.data == true) {
       setStatusMenssage(true);
-        setMensajeColor("alert-green");
-        setMensajeError("Actualizado exitosamente.");
-        setTimeout(() => {
-          setStatusMenssage(false);
-          router.reload()
-        }, 2000);
-    }else{
+      setMensajeColor("alert-green");
+      setMensajeError("Actualizado exitosamente.");
+      setTimeout(() => {
+        setStatusMenssage(false);
+        router.reload()
+      }, 2000);
+    } else {
       setStatusMenssage(true);
-        setMensajeColor("alert-red");
-        setMensajeError('hubo un error');
-        setTimeout(() => {
-          setStatusMenssage(false);
-        }, 2000);
+      setMensajeColor("alert-red");
+      setMensajeError('hubo un error');
+      setTimeout(() => {
+        setStatusMenssage(false);
+      }, 2000);
     }
   };
   return (
@@ -75,7 +75,7 @@ export async function getServerSideProps(ctx) {
   const totalRetencion = await axios({
     method: "get",
     url:
-      libs.location() + `api/consulta-total-retencion/${idEmpresa}/${periodo}`,
+      libs.location() + `/retencion-fuente/totales-retencion/${idEmpresa}/${periodo}`,
     headers: {
       authorization: `Bearer ${token}`,
     },

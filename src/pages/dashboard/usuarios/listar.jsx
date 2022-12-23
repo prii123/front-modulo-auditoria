@@ -22,32 +22,32 @@ const Nav = () => {
 };
 
 const listar = ({ data }) => {
-  // console.log(data);
+  console.log(data);
   return (
     <Layout head={<Nav />}>
       <ul>
         {data?.map((user) => {
           return (
-            <div className="card mb-3 hover-cards" style={{ maxWidth: 540 }} key={user.id}>
+            <div className="card mb-3 hover-cards" style={{ maxWidth: 540 }} key={user?.id}>
               <div className="row g-0">
                 <div className="col-md-4">
                   <img
                     src={user?.image_url}
                     className="img-fluid rounded-start"
-                    alt={user.username}
+                    alt={user?.name}
                   />
                 </div>
                 <div className="col-md-8">
                   <div className="card-body">
                     <h5 className="card-title">
-                      {user.username.toUpperCase()}
+                      {user?.name?.toUpperCase()}
                     </h5>
-                    <p className="card-text">{user.email}</p>
-                    <p className="card-text">{user.nombre_rol}</p>
+                    <p className="card-text">{user?.email}</p>
+                    <p className="card-text">{user?.idRol}</p>
                   </div>
                 </div>
               </div>
-             
+
             </div>
           );
         })}
@@ -59,8 +59,8 @@ const listar = ({ data }) => {
 };
 
 export async function getServerSideProps(ctx) {
-  const json = await myGet("api/users", ctx);
-  return { props: { data: json } };
+  const json = await myGet("/usuarios", ctx);
+  return { props: { data: json?.usuarios } };
 }
 
 export default listar;
