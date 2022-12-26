@@ -22,7 +22,7 @@ const Nav = () => {
 };
 
 const listar = ({ data }) => {
-  console.log(data);
+  // console.log(data);
   return (
     <Layout head={<Nav />}>
       <ul>

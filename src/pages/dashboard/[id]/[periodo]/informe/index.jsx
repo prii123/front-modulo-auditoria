@@ -68,7 +68,7 @@ const informe = () => {
     const res = await axios({
       method: "get",
       url:
-        libs.location() + 
+        libs.location() +
         "/informes/consultar/" +
         idEmpresa +
         "/" +
@@ -102,10 +102,11 @@ const informe = () => {
       head: {
         fecha: libs.formatFechaLarga(new Date()),
         dirigido: res.data[0]?.razonSocial,
+        logo: await libs.urlImgBase64("https://res.cloudinary.com/dz7jl3nbg/image/upload/v1659536608/ayc_ve1zdz.jpg")
       },
       asunto: {
         asunto: "REVISIÓN DE LA INFORMACIÓN CONTABLE",
-        delegado: res.data[0]?.name,
+        delegado: res.data[0]?.username,
       },
       body: {
         periodo: res.data[0]?.periodo,

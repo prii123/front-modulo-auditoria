@@ -23,6 +23,11 @@ export const navigator = [
     nombre: "Usuarios",
     link: "/dashboard/usuarios/listar",
   },
+  {
+    id: 5,
+    nombre: "Formatos",
+    link: "/dashboard/formatos",
+  },
 ];
 
 const Navigation = () => {

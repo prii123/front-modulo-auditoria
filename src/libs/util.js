@@ -38,6 +38,7 @@ const ayudas = {
     //console.log(formato1);
     return formato1;
   },
+
   meses(mes){
     let listaMes = {
       1:"Enero", 7:"Julio",
@@ -50,6 +51,7 @@ const ayudas = {
 
     return listaMes[mes]
   },
+
   formatFechaLarga(hoy) {
     let mesLetras = "";
 
@@ -103,17 +105,37 @@ const ayudas = {
     //console.log(formato1);
     return formato1;
   },
+
   splitFecha(hoy) {
     // formatea fechas que viene un string
     let dia = hoy?.split("T")[0];
 
     return dia;
   },
+
   location() {
     return "http://localhost:4000";
   },
+
   principalPage(){
     return "dashboard"
+  },
+
+  urlImgBase64(IMAGE_LOCATION){
+
+    const data64 = fetch(IMAGE_LOCATION)
+      .then((res) => res.arrayBuffer())
+      .then((arrayBufferData) => {
+      const base64String = btoa(
+        String.fromCharCode(...new Uint8Array(arrayBufferData))
+      );
+      const imageFromArrayBuffer = `data:image/png;base64,${base64String}`;
+      // console.log(imageFromArrayBuffer);
+      return imageFromArrayBuffer
+    });
+
+    return data64
+
   }
 };
 export default ayudas;

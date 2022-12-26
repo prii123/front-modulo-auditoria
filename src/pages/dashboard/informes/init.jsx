@@ -226,6 +226,7 @@ export async function getServerSideProps(ctx) {
     head: {
       fecha: libs.formatFechaLarga(new Date()),
       dirigido: res.data[0]?.razonSocial,
+      logo: await libs.urlImgBase64("https://res.cloudinary.com/dz7jl3nbg/image/upload/v1659536608/ayc_ve1zdz.jpg")
     },
     asunto: {
       asunto: "REVISIÓN DE LA INFORMACIÓN CONTABLE",
