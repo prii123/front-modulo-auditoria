@@ -13,31 +13,32 @@ const retencion = ({ tipoRetencion, retenciones, retencionesGuardadas }) => {
   const [statusMenssage, setStatusMenssage] = React.useState(false);
   const [mensajeColor, setMensajeColor] = React.useState("");
 
-  const hanleClieckAgregarOtrasRtetenciones = () => {
-    const id = router?.query?.id
-    const periodo = router?.query?.periodo;
-
-    router.push(`/${libs.principalPage()}/${id}/${periodo}/retencion/agregarotrasretenciones`)
-  }
+  // const hanleClieckAgregarOtrasRtetenciones = () => {
+  //   const id = router?.query?.id
+  //   const periodo = router?.query?.periodo;
+  //   router.push(`/${libs.principalPage()}/${id}/${periodo}/retencion/agregarotrasretenciones`)
+  // }
 
   const agregarTablaDeRetencion = async (e) => {
     const token = cookie.get('__session');
 
-    let idDocumento = parseInt(e.target.parentNode.parentNode.parentNode.parentNode.parentNode.childNodes[0].innerText)
+    let documentoId = parseInt(e.target.parentNode.parentNode.parentNode.parentNode.parentNode.childNodes[0].innerText)
     // console.log(idDocumento)
-    const id_tipo_retencion = parseInt(e.target.value);
-    let documento = retenciones.find(valor => valor.id == idDocumento);
+    const tiporetencionId = parseInt(e.target.value);
+    let documento = retenciones.find(valor => valor.id == documentoId);
     // console.log(documento)
-    let idEmpresa = documento?.idEmpresa;
+    let empresaId = documento?.empresaId;
     let periodo = documento?.periodo;
     let base = documento?.valorNeto;
     let valor = documento?.reteFuente;
 
-    if (id_tipo_retencion && idEmpresa && idDocumento && periodo && base && valor) {
+    // console.log(tiporetencionId + "-" + empresaId + "-" + documentoId + "-" + periodo + "-" + base + "-" + valor)
+
+    if (tiporetencionId && empresaId && documentoId && periodo && base && valor) {
       let datos = {
-        id_tipo_retencion,
-        idEmpresa,
-        idDocumento,
+        tiporetencionId,
+        empresaId,
+        documentoId,
         periodo,
         base,
         valor
@@ -47,14 +48,19 @@ const retencion = ({ tipoRetencion, retenciones, retencionesGuardadas }) => {
 
       const tipoRetencion = await axios({
         method: "post",
-        url: libs.location() + "api/detalle-retencion",
+        url: libs.location() + "/retencion-fuente",
         headers: {
           authorization: `Bearer ${token}`,
         },
         data: datos
       });
 
-      if (tipoRetencion.data.affectedRows > 0) {
+      const statusCode = tipoRetencion.status > 200 ? true : false;
+      console.log(statusCode)
+
+
+
+      if (statusCode) {
         // router.reload();
         // console.log(tipoRetencion) 
         setStatusMenssage(true);
@@ -76,18 +82,18 @@ const retencion = ({ tipoRetencion, retenciones, retencionesGuardadas }) => {
   }
 
   const borrarElemento = async (e) => {
-    // console.log(e.target.value)
+    console.log(e.target.value)
 
     const token = cookie.get('__session');
     const tipoRetencion = await axios({
       method: "delete",
-      url: libs.location() + "api/detalle-retencion/" + e.target.value,
+      url: libs.location() + "/retencion-fuente/documentoId/" + e.target.value,
       headers: {
         authorization: `Bearer ${token}`,
       },
     });
 
-    if(tipoRetencion.status == 200){
+    if (tipoRetencion.status <= 200) {
       router.reload()
     }
   }
@@ -95,7 +101,7 @@ const retencion = ({ tipoRetencion, retenciones, retencionesGuardadas }) => {
     <Layout head={"ANEXO DE LA DECLARACION DE RETENCION EN LA FUENTE"}>
       {statusMenssage && <Alert descripcion={mensajeError} color={mensajeColor} />}
       <div className="container">
-        <div><button onClick={hanleClieckAgregarOtrasRtetenciones} className="btn">Agregar otras retenciones</button></div>
+        {/* <div><button onClick={hanleClieckAgregarOtrasRtetenciones} className="btn">Agregar otras retenciones</button></div> */}
         <table className="table table-hover ">
           <thead>
             <tr>
@@ -152,12 +158,13 @@ const retencion = ({ tipoRetencion, retenciones, retencionesGuardadas }) => {
                         </div>
                       </div>
                     </td>
-                    <td>{retencionesGuardadas.find(retencion => retencion.idDocumento == ret.id)?.concepto ? retencionesGuardadas.find(retencion => retencion.idDocumento == ret.id)?.concepto : 'Vacio'}</td>
+                    <td>{retencionesGuardadas.find(retencion => retencion.documentoId == ret.id)?.tiporetencion.concepto ? retencionesGuardadas.find(retencion => retencion.documentoId == ret.id)?.tiporetencion.concepto : 'Vacio'}</td>
                     <td>
-                      <button value={ret.id} onClick={(e) => borrarElemento(e)}>
-                        {/* <i className="bi bi-trash3-fill"></i> */}
-                        borrar
-                      </button>
+                      {retencionesGuardadas.find(retencion => retencion.documentoId == ret.id)?.tiporetencion.concepto ? (
+                        <button value={ret.id} onClick={(e) => borrarElemento(e)}>
+                          borrar
+                        </button>
+                      ) : ''}
                     </td>
                   </tr>
                 );
@@ -182,7 +189,7 @@ export async function getServerSideProps(ctx) {
 
   const tipoRetencion = await axios({
     method: "get",
-    url: libs.location() + "api/tiporetencion",
+    url: libs.location() + "/retencion-fuente/tipos",
     headers: {
       authorization: `Bearer ${token}`,
     },
@@ -190,7 +197,15 @@ export async function getServerSideProps(ctx) {
 
   const retencionesPracticadas = await axios({
     method: "get",
-    url: libs.location() + `api/retencione-practicadas/${idEmpresa}/${periodo}`,
+    url: libs.location() + `/retencion-fuente/${idEmpresa}/${periodo}`,
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
+
+  const retencionesGuardadas = await axios({
+    method: "get",
+    url: libs.location() + `/retencion-fuente/anexo-retencion/${idEmpresa}/${periodo}`,
     headers: {
       authorization: `Bearer ${token}`,
     },
@@ -201,8 +216,8 @@ export async function getServerSideProps(ctx) {
   return {
     props: {
       tipoRetencion: tipoRetencion?.data,
-      retenciones: retencionesPracticadas?.data.reteFuentePracticadas,
-      retencionesGuardadas: retencionesPracticadas?.data.reteFuenteGuardada
+      retenciones: retencionesPracticadas?.data?.retencionesEnDocumento,
+      retencionesGuardadas: retencionesGuardadas?.data
     },
   };
 }

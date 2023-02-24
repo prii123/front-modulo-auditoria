@@ -131,15 +131,15 @@
 
 
 .alert-red {
-  background-color: #f80c0c2f;
-  border: 1px solid #ff0000;
-  color: #ff0000;
+  background-color: #ff0000;
+  border: 1px solid #520303;
+  color: #680000;
 }
 
 .alert-green {
-  background-color: #1cf80c2f;
-  border: 1px solid #00ff04;
-  color: #00ff04;
+  background-color: #11ff00;
+  border: 1px solid #026d04;
+  color: #005501;
 }
 
 
@@ -151,5 +151,6 @@
 
   position: fixed;
   left: 40%;
+  bottom: 0;
 }
 

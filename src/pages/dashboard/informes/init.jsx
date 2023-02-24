@@ -32,9 +32,8 @@ const Periodos = ({ periodos }) => {
                 <div>
                   <li
                     onClick={() => establecer(item.periodo)}
-                    className={`list-group-item ${
-                      status == item.periodo ? "active" : "none"
-                    }`}
+                    className={`list-group-item ${status == item.periodo ? "active" : "none"
+                      }`}
                     id={item.periodo}
                   >
                     {item.periodo}
@@ -73,9 +72,8 @@ const Empresas = ({ empresas }) => {
                 <div>
                   <li
                     onClick={() => establecer(item.id)}
-                    className={`list-group-item ${
-                      status == item.id ? "active" : "none"
-                    }`}
+                    className={`list-group-item ${status == item.id ? "active" : "none"
+                      }`}
                     id={item.periodo}
                   >
                     {item.razonSocial}
@@ -177,24 +175,26 @@ const index = ({
 };
 
 export async function getServerSideProps(ctx) {
-  const periodo = ctx?.query?.per;
-  const idEmpresa = ctx?.query?.emp;
+  const periodo = ctx?.query?.per || 0;
+  const idEmpresa = ctx?.query?.emp || 0;
 
-  const json = await myGet("api/periodos-por-usuario", ctx);
-  const empresas = await myGet("api/empresas-por-periodo/" + periodo, ctx);
+  const json = await myGet("/informes/periodos-por-usuario", ctx);
+
+  const empresas = await myGet("/informes/empresas-por-periodo/" + periodo, ctx);
 
   const formu350 = await myGet(
-    `api/consulta-total-retencion/${idEmpresa}/${periodo}`,
+    `/retencion-fuente/totales-retencion/${idEmpresa}/${periodo}`,
     ctx
   );
 
   const token = ctx?.req?.cookies?.__session;
 
+
   const res = await axios({
     method: "get",
     url:
       libs.location() +
-      "api/consulta-informe-revision/" +
+      "/informes/consultar/" +
       idEmpresa +
       "/" +
       periodo,
@@ -206,7 +206,7 @@ export async function getServerSideProps(ctx) {
   const hallazgos = await axios({
     method: "get",
     url:
-      libs.location() + "api/consulta-hallazgos/" + idEmpresa + "/" + periodo,
+      libs.location() + "/hallazgos/" + periodo + "/" + idEmpresa,
     headers: {
       authorization: `Bearer ${token}`,
     },
@@ -215,20 +215,22 @@ export async function getServerSideProps(ctx) {
   const hallazgosGenerales = await axios({
     method: "get",
     url:
-      libs.location() + "api/hallazgos-generales/" + idEmpresa + "/" + periodo,
+      libs.location() + "/hallazgos/generales/" + periodo + "/" + idEmpresa,
     headers: {
       authorization: `Bearer ${token}`,
     },
   });
 
-  const info = JSON.stringify({ 
+
+  const info = JSON.stringify({
     head: {
       fecha: libs.formatFechaLarga(new Date()),
       dirigido: res.data[0]?.razonSocial,
+      logo: await libs.urlImgBase64("https://res.cloudinary.com/dz7jl3nbg/image/upload/v1659536608/ayc_ve1zdz.jpg")
     },
     asunto: {
       asunto: "REVISIÓN DE LA INFORMACIÓN CONTABLE",
-      delegado: res.data[0]?.username,
+      delegado: res.data[0]?.name,
     },
     body: {
       periodo: res.data[0]?.periodo,
@@ -243,7 +245,7 @@ export async function getServerSideProps(ctx) {
     method: "get",
     url:
       libs.location() +
-      "api/impuestos-detalle-retencion-anexo/" +
+      "/retencion-fuente/anexo-retencion/" +
       idEmpresa +
       "/" +
       periodo,
@@ -255,6 +257,11 @@ export async function getServerSideProps(ctx) {
   // console.log(anexoRetencion.data)
 
   const detalleAnexo = anexoRetencion?.data;
+
+  // const detalleAnexo = {
+  //   detalleAnexo
+  // }
+
   return {
     props: {
       periodos: json,

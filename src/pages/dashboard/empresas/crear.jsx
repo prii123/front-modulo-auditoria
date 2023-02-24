@@ -21,8 +21,8 @@ const crear = () => {
     if (nit != null && dv != null && razonSocial != null && direccion != null && ciudad != null) {
 
       const docBody = {
-        nit: parseInt(nit),
-        digitoVerificacion: parseInt(dv),
+        nit: nit,
+        digitoVerificacion: dv,
         razonSocial,
         direccion,
         ciudad
@@ -30,14 +30,16 @@ const crear = () => {
       // console.log(docBody)
       const incertarEmpresa = await axios({
         method: "post",
-        url: libs.location() + "api/empresa",
+        url: libs.location() + "/empresas",
         headers: {
           authorization: `Bearer ${token}`,
         },
         data: docBody,
       });
 
-      if (incertarEmpresa?.data.affectedRows) {
+      // console.log(incertarEmpresa.status)
+
+      if (incertarEmpresa?.status <= 200) {
         setAlert(true);
         setDescripcion("Usuario creado Exitosamente.");
         setColor("alert-green");

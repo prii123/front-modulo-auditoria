@@ -67,9 +67,10 @@ const empresas = ({ data }) => {
 };
 
 export async function getServerSideProps(ctx) {
-  const json = await myGet("api/empresas", ctx);
+  const json = await myGet("/empresas", ctx);
+  console.log(json)
 
-  return { props: { data: json } };
+  return { props: { data: json?.data } };
 }
 
 export default empresas;

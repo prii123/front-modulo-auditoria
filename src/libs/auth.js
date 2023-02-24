@@ -34,7 +34,7 @@ function useProvideAuth() {
   const signIn = async ({ email, password }) => {
     const result = await axios({
       method: "post",
-      url: libs.location() + "login",
+      url: libs.location() + "/auth/login",
       data: {
         email,
         password,
@@ -44,10 +44,10 @@ function useProvideAuth() {
 
     if (result?.status !== 401 && result?.status !== 500) {
       // try {
-        setAuthToken(result.data);
-        cookie.set("__session", result.data);
+        setAuthToken(result?.data?.token);
+        cookie.set("__session", result?.data?.token);
 
-        if (result?.data) {
+        if (result?.data?.token) {
           return {
             pass: true,
           };

@@ -10,7 +10,7 @@ const crear = ({ data }) => {
   // console.log(data)
   const token = cookie.get("__session");
 
-  const [username, setUsername] = useState("");
+  const [name, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [idRol, setIdRol] = useState(0);
   const [password, setPassword] = useState("");
@@ -34,7 +34,7 @@ const crear = ({ data }) => {
   }
   const guardarDatos = async () => {
     if (
-      username != null &&
+      name != null &&
       email != null &&
       idRol != 0 &&
       password != null &&
@@ -44,20 +44,23 @@ const crear = ({ data }) => {
         const docBody = {
           email,
           password,
-          username,
+          name,
           idRol: parseInt(idRol),
         };
         // console.log(docBody)
-        const incertarHallaz = await axios({
+        const crearUsuario = await axios({
           method: "post",
-          url: libs.location() + "api/user",
+          url: libs.location() + "/usuarios",
           headers: {
             authorization: `Bearer ${token}`,
           },
           data: docBody,
         });
 
-        if (incertarHallaz.status == 200) {
+        // console.log(crearUsuario)
+        // console.log(crearUsuario.status)
+
+        if (crearUsuario.status <= 210) {
           setAlert(true);
           setDescripcion("Usuario creado Exitosamente.");
           setColor("alert-green");
@@ -176,7 +179,7 @@ const crear = ({ data }) => {
 };
 
 export async function getServerSideProps(ctx) {
-  const json = await myGet("api/tipousers", ctx);
+  const json = await myGet("/usuarios/tipo-usuario", ctx);
   return { props: { data: json } };
 }
 

@@ -7,10 +7,10 @@ import Link from "next/link";
 import axios from "axios";
 import libs from "../../../../libs/util";
 import cookie from "js-cookie";
-const doc = ({documentosAuditar}) => {
+const doc = ({ documentosAuditar }) => {
   const Router = useRouter();
 
-// console.log(documentosAuditar)
+  // console.log(documentosAuditar)
 
   const [hallazgo, setHallazgo] = useState("");
   const [accionSeguir, setAccionSeguir] = useState("");
@@ -22,26 +22,28 @@ const doc = ({documentosAuditar}) => {
   const eliminarDatos = async () => {
     const token = cookie.get("__session");
 
-    const idEmpresa = Router.query.id;
-    const periodo = Router.query.periodo;
-    const tipoDoc = Router.query.doc;
+    const idEmpresa = Router?.query?.id;
+    const periodo = Router?.query?.periodo;
+    const tipoDoc = Router?.query?.doc;
 
     const documentosPeriodo = await axios({
       method: "delete",
       url:
         libs.location() +
-        "api/documentos/" +
-        idEmpresa +
-        "/" +
+        "/documentos/" +
         periodo +
         "/" +
-        tipoDoc,
+        tipoDoc +
+        "/" +
+        idEmpresa,
       headers: {
         authorization: `Bearer ${token}`,
       },
     });
 
-    if (documentosPeriodo.data.affectedRows) {
+    // console.log(documentosPeriodo)
+
+    if (documentosPeriodo.status == 200) {
       window.location.reload();
     }
   };
@@ -50,16 +52,20 @@ const doc = ({documentosAuditar}) => {
     const token = cookie.get("__session");
 
     const docBody = {
-      idDocumento: idDocumentoAuditado,
-      id_tipo_documento: Router.query?.doc,
+      empresaId: Router.query.id,
+      periodo: Router.query.periodo,
+      documentoId: idDocumentoAuditado,
+      tipodocumentoId: Router.query?.doc,
       hallazgo: hallazgo,
       accionCorrectiva: accionSeguir,
     };
 
+    // console.log(docBody)
+
     if (!idDelHallazgoEncontrado == "") {
       const incertarHallaz = await axios({
-        method: "put",
-        url: libs.location() + "api/hallazgos/" + idDelHallazgoEncontrado,
+        method: "patch",
+        url: libs.location() + "/hallazgos/" + idDelHallazgoEncontrado,
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -68,23 +74,27 @@ const doc = ({documentosAuditar}) => {
     } else {
       const incertarHallaz = await axios({
         method: "post",
-        url: libs.location() + "api/hallazgos",
+        url: libs.location() + "/hallazgos",
         headers: {
           authorization: `Bearer ${token}`,
         },
         data: docBody,
       });
 
+
+
       const actualizaDocumento = await axios({
-        method: "put",
-        url: libs.location() + "api/documento/" + idDocumentoAuditado,
+        method: "patch",
+        url: libs.location() + "/documentos/" + idDocumentoAuditado,
         headers: {
           authorization: `Bearer ${token}`,
         },
         data: {
-          hallazgo: incertarHallaz?.data?.insertId,
+          hallazgo: incertarHallaz?.data?.id,
         },
       });
+
+      // console.log(actualizaDocumento)
     }
     setModal("none");
     Router.reload()
@@ -95,7 +105,7 @@ const doc = ({documentosAuditar}) => {
 
     const hallazgo = await axios({
       method: "get",
-      url: libs.location() + "api/hallazgos/" + idBuscado,
+      url: libs.location() + "/hallazgos/documento-id/" + idBuscado,
       headers: {
         authorization: `Bearer ${token}`,
       },
@@ -105,7 +115,6 @@ const doc = ({documentosAuditar}) => {
     setHallazgo(hallazgo?.data[0]?.hallazgo);
     setAccionSeguir(hallazgo?.data[0]?.accionCorrectiva);
     setIdDelHallazgoEncontrado(hallazgo?.data[0]?.id);
-    //  console.log(hallazgo)
   };
 
   const eliminarHalazgo = async () => {
@@ -113,15 +122,16 @@ const doc = ({documentosAuditar}) => {
 
     const hallazgoo = await axios({
       method: "delete",
-      url: libs.location() + "api/hallazgos/" + hallazgoModal[0]?.id,
+      url: libs.location() + "/hallazgos/" + hallazgoModal[0]?.id,
       headers: {
         authorization: `Bearer ${token}`,
       },
     });
 
+
     const actualizaDocumento = await axios({
-      method: "put",
-      url: libs.location() + "api/documento/" + idDocumentoAuditado,
+      method: "patch",
+      url: libs.location() + "/documentos/" + idDocumentoAuditado,
       headers: {
         authorization: `Bearer ${token}`,
       },
@@ -196,7 +206,7 @@ const doc = ({documentosAuditar}) => {
       <br />
       <br />
       <div>
-        <table className="table table-bordered table-hover" style={{fontSize: '.9rem'}}>
+        <table className="table table-bordered table-hover" style={{ fontSize: '.9rem' }}>
           <thead>
             <tr>
               <th scope="col"></th>
@@ -268,18 +278,19 @@ export async function getServerSideProps(ctx) {
     method: "get",
     url:
       libs.location() +
-      "api/documentos/" +
-      idEmpresa +
-      "/" +
+      "/documentos/" +
       periodo +
       "/" +
-      tipoDoc,
+      tipoDoc +
+      "/" +
+      idEmpresa
+    ,
     headers: {
       authorization: `Bearer ${token}`,
     },
   });
 
-  console.log(tipoDoc)
+  // console.log(tipoDoc)
   return {
     props: {
       documentosAuditar: documentosPeriodo?.data,

@@ -19,7 +19,7 @@ const importacion = ({ data, cantidades }) => {
   const [documentoSeleccionado, setDocumentoSeleccionado] = React.useState(0);
 
   const [numeroProgress, setNumeroProgress] = React.useState(0);
-  // console.log(path.asPath)
+
 
   const auhtCook = cookie.get("__session");
 
@@ -119,9 +119,9 @@ const importacion = ({ data, cantidades }) => {
       const documentos = []
 
 
-      for (let i=0; i< documento.length; i++){
+      for (let i = 0; i < documento.length; i++) {
         const body = {
-          idEmpresa: libs.convertirANumero(idEmpresa),
+          empresaId: libs.convertirANumero(idEmpresa),
           nit: libs.convertirANumero(documento[i]?.DocumentoCliente),
           razonSocial: documento[i]?.NombredelCliente,
           tipoDoc: libs.convertirANumero(tipoDoc),
@@ -135,49 +135,28 @@ const importacion = ({ data, cantidades }) => {
         };
 
         documentos.push(body)
-        var valorCargado = Math.round((100*(i+1))/documento.length);
+        var valorCargado = Math.round((100 * (i + 1)) / documento.length);
         setNumeroProgress(valorCargado);
       }
 
-      // documento.map(async (daDoc, key) => {
-      //   const body = {
-      //     idEmpresa: libs.convertirANumero(idEmpresa),
-      //     nit: libs.convertirANumero(daDoc?.nit),
-      //     razonSocial: daDoc?.razonSocial,
-      //     tipoDoc: libs.convertirANumero(tipoDoc),
-      //     numeroDoc: libs.convertirANumero(daDoc?.numeroDoc),
-      //     numeroFE: daDoc?.numeroFE,
-      //     valorNeto: libs.convertirANumero(daDoc?.valorNeto),
-      //     impuesto: libs.convertirANumero(daDoc?.impuesto),
-      //     reteFuente: libs.convertirANumero(daDoc?.reteFuente),
-      //     reteIva: libs.convertirANumero(daDoc?.reteIva),
-      //     periodo: periodo,
-      //   };
-
-      //   documentos.push(body)
-      //   var valorCargado = Math.round((100*(key+1))/documento.length);
-      //   setNumeroProgress(valorCargado);
-
-      // });
-
-        const resp = await axios({
-          method: "post",
-          url: libs.location() + "api/documento-masivo",
-          headers: {
-            authorization: `Bearer ${auhtCook}`,
-          },
-          data: documentos,
-        });
+      const resp = await axios({
+        method: "post",
+        url: libs.location() + "/documentos",
+        headers: {
+          authorization: `Bearer ${auhtCook}`,
+        },
+        data: documentos,
+      });
 
 
 
-        setStatusMenssage(true);
-        setMensajeColor("alert-green");
-        setMensajeError('guardado');
-        setTimeout(() => {
-          setStatusMenssage(false);
-          Router.reload()
-        }, 2000);
+      setStatusMenssage(true);
+      setMensajeColor("alert-green");
+      setMensajeError('guardado');
+      setTimeout(() => {
+        setStatusMenssage(false);
+        Router.reload()
+      }, 2000);
 
 
     }
@@ -185,7 +164,7 @@ const importacion = ({ data, cantidades }) => {
 
   return (
     <Layout head={<div>IMPORTACION DE DATOS</div>}>
-      
+
       <div className="row">
         {data &&
           data.map((doc) => {
@@ -193,12 +172,11 @@ const importacion = ({ data, cantidades }) => {
             return (
               <div className={`col-3 hover-cards  p-0`} key={doc.id}>
                 <input
-                  className={`form-check-input ${
-                    cantidades.find((valores) => valores.id == doc.id)
+                  className={`form-check-input ${cantidades.find((valores) => valores.id == doc.id)
                       .cantidad > 0
                       ? "bg-success"
                       : "none"
-                  }`}
+                    }`}
                   type="radio"
                   name="flexRadioDefault"
                   id="flexRadioDefault1"
@@ -232,8 +210,8 @@ const importacion = ({ data, cantidades }) => {
         </button>
 
         {statusMenssage && (
-        <Alert descripcion={mensajeError} color={mensajeColor} />
-      )}
+          <Alert descripcion={mensajeError} color={mensajeColor} />
+        )}
 
         {documento && documento.length}
         <div className="card-body">
@@ -265,7 +243,7 @@ const importacion = ({ data, cantidades }) => {
                 aria-valuenow={numeroProgress}
                 aria-valuemin="0"
                 aria-valuemax="100"
-                style={{ width: numeroProgress+'%', backgroundColor: '#f5a745' }}
+                style={{ width: numeroProgress + '%', backgroundColor: '#f5a745' }}
               >
                 {numeroProgress}%
               </div>
@@ -318,20 +296,23 @@ export async function getServerSideProps(ctx) {
   const periodo = ctx?.query.periodo;
   const resp = await axios({
     method: "get",
-    url: libs.location() + "api/tipodocumento",
+    url: libs.location() + "/documentos/tipo-documentos",
     headers: {
       authorization: `Bearer ${token}`,
     },
   });
 
+
+
   const cant = await axios({
     method: "get",
     url:
-      libs.location() + `api/numero-por-cada-documento/${idEmpresa}/${periodo}`,
+      libs.location() + `/documentos/numero-por-cada-documento/${periodo}/${idEmpresa}`,
     headers: {
       authorization: `Bearer ${token}`,
     },
   });
+
 
   const cantidades = cant.data;
 

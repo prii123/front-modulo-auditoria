@@ -4,6 +4,7 @@ import { myGet } from "../../../libs/fetchApi";
 import cookie from "js-cookie";
 import axios from "axios";
 import libs from "../../../libs/util";
+import Alerta from "../../../components/utiles/Alertas";
 
 const modificar = ({ data }) => {
   const [nit, setNit] = useState("");
@@ -12,6 +13,12 @@ const modificar = ({ data }) => {
   const [direccion, setDireccion] = useState("");
   const [ciudad, setCiudad] = useState("");
   const [autorr, setAutorr] = useState('');
+
+  const [alert, setAlert] = useState(false);
+  const [descripcion, setDescripcion] = useState("");
+  const [color, setColor] = useState("");
+
+  // console.log(data)
 
   const guardarDatos = async () => {
     const token = cookie.get("__session");
@@ -24,8 +31,8 @@ const modificar = ({ data }) => {
       autorr != null
     ) {
       const docBody = {
-        nit: parseInt(nit),
-        digitoVerificacion: parseInt(dv),
+        nit: nit,
+        digitoVerificacion: dv,
         razonSocial,
         direccion,
         ciudad,
@@ -34,18 +41,34 @@ const modificar = ({ data }) => {
       // console.log(docBody)
       const actualizar = await axios({
         method: "put",
-        url: libs.location() + "api/empresa/" + data[0].id,
+        url: libs.location() + "/empresas/" + data[0].id,
         headers: {
           authorization: `Bearer ${token}`,
         },
         data: docBody,
       });
 
-      if (actualizar?.data.affectedRows) {
-        window.location.reload();
+      // console.log(actualizar?.data?.message)
+
+      if (actualizar?.status <= 200) {
+        setAlert(true);
+        setDescripcion(actualizar?.data?.message);
+        setColor("alert-green");
+        setTimeout(() => {
+          setAlert(false);
+          setDescripcion("");
+          setColor("");
+        }, 1000);
       }
     } else {
-      console.log("debe llenar todos los campos");
+      setAlert(true);
+      setDescripcion("Hay un error.");
+      setColor("alert-red");
+      setTimeout(() => {
+        setAlert(false);
+        setDescripcion("");
+        setColor("");
+      }, 1000);
     }
   };
 
@@ -58,7 +81,7 @@ const modificar = ({ data }) => {
     setAutorr(data[0]?.autorrenta);
   }, []);
 
-//   console.log(data);
+  //   console.log(data);
 
   return (
     <Layout head={data[0]?.razonSocial}>
@@ -159,6 +182,10 @@ const modificar = ({ data }) => {
               Guardar
             </button>
           </div>
+
+          {alert && (
+            <Alerta descripcion={descripcion} color={color} />
+          )}
         </div>
       </>
     </Layout>
@@ -172,13 +199,13 @@ export async function getServerSideProps(ctx) {
 
   const actualizar = await axios({
     method: "get",
-    url: libs.location() + "api/empresa/" + idEmpresa,
+    url: libs.location() + "/empresas/" + idEmpresa,
     headers: {
       authorization: `Bearer ${token}`,
     },
   });
 
-  return { props: { data: actualizar?.data } };
+  return { props: { data: actualizar?.data?.data } };
 }
 
 export default modificar;
