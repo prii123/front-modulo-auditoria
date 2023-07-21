@@ -25,25 +25,23 @@ export async function myGet(url, ctx) {
       }, 
     });
 
-    if (resp.status === 500 && ctx.req) {
-      ctx.res?.writeHead(302, {
-        Location: "/login",
-      });
-      ctx.res?.end();
-      return;
+    if (resp.status == 500 ) {
+      Router.replace("/login");
+      return {};
+    
     }
 
-    if (resp.status === 500 && !ctx.req) {
+    else if (resp.status === 500 && !ctx.req) {
       Router.replace("/login");
       return {};
     }
 
-    if (resp.status === 401 && !ctx.req) {
+    else if (resp.status === 401 && !ctx.req) {
       Router.replace("/login");
       return {};
     }
 
-    if (resp.status === 401 && ctx.req) {
+    else if (resp.status === 401 && ctx.req) {
       ctx.res?.writeHead(302, {
         Location: "/login",
       });

@@ -316,6 +316,8 @@ export async function getServerSideProps(ctx) {
 
   const cantidades = cant.data;
 
+  console.log(resp.data)
+
   const json = resp.data;
 
   return { props: { data: json, cantidades } };

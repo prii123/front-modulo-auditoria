@@ -33,16 +33,19 @@ export default function Login() {
       }, 3000);
     } else {
       signIn({ email, password }).then((ress) => {
+
+
         setMessage(ress);
         if (ress?.pass) router.push("/dashboard");
 
-        if (ress?.message) {
-          setColorAlert("danger");
+
+        if (ress?.message && ress?.pass == false) {
+          setColorAlert("alert-red");
           setDescripcionAlert(ress?.message);
           setTimeout(() => {
             setColorAlert("");
             setDescripcionAlert("");
-          }, 3000);
+          }, 5000);
         }
       });
     }

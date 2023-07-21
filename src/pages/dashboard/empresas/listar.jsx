@@ -68,7 +68,7 @@ const empresas = ({ data }) => {
 
 export async function getServerSideProps(ctx) {
   const json = await myGet("/empresas", ctx);
-  console.log(json)
+  // console.log(json)
 
   return { props: { data: json?.data } };
 }

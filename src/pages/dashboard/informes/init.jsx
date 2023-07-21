@@ -203,6 +203,7 @@ export async function getServerSideProps(ctx) {
     },
   });
 
+
   const hallazgos = await axios({
     method: "get",
     url:
@@ -239,7 +240,7 @@ export async function getServerSideProps(ctx) {
     hallazgo: hallazgos?.data,
     hallazgosGenerales: hallazgosGenerales?.data
   });
-  // console.log(info);
+
 
   const anexoRetencion = await axios({
     method: "get",

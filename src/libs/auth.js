@@ -32,18 +32,19 @@ function useProvideAuth() {
   };
 
   const signIn = async ({ email, password }) => {
-    const result = await axios({
-      method: "post",
-      url: libs.location() + "/auth/login",
-      data: {
-        email,
-        password,
-      },
-    });
+    try {
+      const result = await axios({
+        method: "post",
+        url: libs.location() + "/auth/login",
+        data: {
+          email,
+          password,
+        },
+      });
 
 
-    if (result?.status !== 401 && result?.status !== 500) {
-      // try {
+      if (result?.status !== 401 && result?.status !== 500 && result?.status !== 404) {
+        // try {
         setAuthToken(result?.data?.token);
         cookie.set("__session", result?.data?.token);
 
@@ -52,14 +53,22 @@ function useProvideAuth() {
             pass: true,
           };
         }
-      // } catch (err) {
-      //   console.log(err);
-      // }
-    } else {
+        // } catch (err) {
+        //   console.log(err);
+        // }
+      } else {
+        return {
+          message: "los datos suministrados son invalidos",
+          pass: false
+        };
+      }
+    } catch (error) {
       return {
         message: "los datos suministrados son invalidos",
+        pass: false
       };
     }
+
   };
 
   const isSignedIn = () => {

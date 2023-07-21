@@ -40,7 +40,7 @@ export async function getServerSideProps(ctx) {
   // });
 
   // const json = resp.data
-  const json = await myGet("/usuarios/active", ctx);
+  const json = await myGet("/usuarios/active", ctx) | null
 
   return { props: { people: json } };
 }
