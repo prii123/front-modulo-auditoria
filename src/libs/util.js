@@ -39,14 +39,14 @@ const ayudas = {
     return formato1;
   },
 
-  meses(mes){
+  meses(mes) {
     let listaMes = {
-      1:"Enero", 7:"Julio",
-      2:"Febrero", 8:"Agosto",
-      3:"Marzo", 9:"Septiembre",
-      4:"Abril", 10:"Octubre",
-      5:"Mayo", 11:"Noviembre",
-      6:"Junio", 12:"Diciembre",
+      1: "Enero", 7: "Julio",
+      2: "Febrero", 8: "Agosto",
+      3: "Marzo", 9: "Septiembre",
+      4: "Abril", 10: "Octubre",
+      5: "Mayo", 11: "Noviembre",
+      6: "Junio", 12: "Diciembre",
     }
 
     return listaMes[mes]
@@ -117,25 +117,90 @@ const ayudas = {
     return "http://localhost:4000";
   },
 
-  principalPage(){
+  principalPage() {
     return "dashboard"
   },
 
-  urlImgBase64(IMAGE_LOCATION){
+  urlImgBase64(IMAGE_LOCATION) {
 
     const data64 = fetch(IMAGE_LOCATION)
       .then((res) => res.arrayBuffer())
       .then((arrayBufferData) => {
-      const base64String = btoa(
-        String.fromCharCode(...new Uint8Array(arrayBufferData))
-      );
-      const imageFromArrayBuffer = `data:image/png;base64,${base64String}`;
-      // console.log(imageFromArrayBuffer);
-      return imageFromArrayBuffer
-    });
+        const base64String = btoa(
+          String.fromCharCode(...new Uint8Array(arrayBufferData))
+        );
+        const imageFromArrayBuffer = `data:image/png;base64,${base64String}`;
+        // console.log(imageFromArrayBuffer);
+        return imageFromArrayBuffer
+      });
 
     return data64
 
+  },
+
+  numeroALetras(numero) {
+    const unidades = ['', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve'];
+    const especiales = ['diez', 'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve'];
+    const decenas = ['', '', 'veinte', 'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa'];
+    const centenas = ['', 'ciento', 'doscientos', 'trescientos', 'cuatrocientos', 'quinientos', 'seiscientos', 'setecientos', 'ochocientos', 'novecientos'];
+
+    function convertirTresCifras(num) {
+      if (num < 10) {
+        return unidades[num];
+      } else if (num < 20) {
+        return especiales[num - 10];
+      } else {
+        const unidad = num % 10;
+        const decena = Math.floor(num / 10) % 10;
+        const centena = Math.floor(num / 100);
+        let resultado = centenas[centena];
+        if (decena > 0) {
+          resultado += ' ' + decenas[decena];
+        }
+        if (unidad > 0) {
+          resultado += ' y ' + unidades[unidad];
+        }
+        return resultado.trim();
+      }
+    }
+
+    if (numero === 0) {
+      return 'cero';
+    } else if (numero < 0) {
+      return 'menos ' + numeroALetras(Math.abs(numero));
+    } else {
+      let numeroEnLetras = '';
+      const numeroAbs = Math.abs(numero);
+      const billones = Math.floor(numeroAbs / 1000000000000);
+      const millones = Math.floor((numeroAbs % 1000000000000) / 1000000);
+      const miles = Math.floor((numeroAbs % 1000000) / 1000);
+      const unidadesNum = numeroAbs % 1000;
+
+      if (billones > 0) {
+        numeroEnLetras += convertirTresCifras(billones) + ' billones ';
+      }
+
+      if (millones > 0) {
+        numeroEnLetras += convertirTresCifras(millones) + ' millones ';
+      }
+
+      if (miles > 0) {
+        numeroEnLetras += convertirTresCifras(miles) + ' mil ';
+      }
+
+      if (unidadesNum > 0) {
+        numeroEnLetras += convertirTresCifras(unidadesNum);
+      }
+
+      return numeroEnLetras.trim() + " (cop)";
+    }
   }
+
+
+
+
+
+
+
 };
 export default ayudas;
