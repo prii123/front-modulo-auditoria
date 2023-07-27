@@ -192,7 +192,7 @@ const ayudas = {
         numeroEnLetras += convertirTresCifras(unidadesNum);
       }
 
-      return numeroEnLetras.trim() + " (cop)";
+      return numeroEnLetras.trim() + " Pesos COP";
     }
   }
 

@@ -1,48 +1,49 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout/Body";
-import { myGet } from "../../libs/fetchApi";
-import Alerta from "../../components/utiles/Alertas";
+import libs from '../../libs/util'
+import axios from "axios";
+
 
 const index = ({ people }) => {
-  // console.log(people[0].username)
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [alert, setAlert] = useState(false);
 
   return (
-    <Layout head={<div className="">{people[0]?.username?.toUpperCase()}</div>}>
-      {/* <Link href={"/dashboard/empresas"}>
-        <a>ir a empresas</a>
-      </Link> */}
-      {JSON.stringify(people[0]?.email)}
-      <br />
+    <Layout head={<div className="">{people?.name?.toUpperCase()}</div>}>
+      <div>
 
-      {alert && <Alerta descripcion={"este es un mensaje de pruebas"} color="alert-green" />}
+        <div className="alert alert-success" role="alert">
+          <div>
+            ¡Bienvenido, {people?.name}!
+          </div>
+          <div>
+            {people?.email}
+          </div>
+          <div>
+            {people?.idRol == 1 ? "Cordinador" : "Contador"}
+          </div>
 
-      <button onClick={()=>{
-        setAlert(true)
-        // setTimeout(() => {
-        //   setAlert(false)
-        // }, 1000)
-      }}>test</button>
+        </div>
+
+      </div>
+
     </Layout>
   );
 };
 
 export async function getServerSideProps(ctx) {
-  // console.log(ctx)
-  // const token = ctx?.req?.cookies?.__session;
-  // const resp = await axios({
-  //   method: "get",
-  //   url: libs.location() + "api/user",
-  //   headers: {
-  //     authorization: `Bearer ${token}`,
-  //   },
-  // });
+  const token = ctx?.req?.cookies?.__session;
 
-  // const json = resp.data
-  const json = await myGet("/usuarios/active", ctx) | null
+  const user = await axios({
+    method: "get",
+    url:
+      libs.location() + `/usuarios/active`,
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
 
-  return { props: { people: json } };
+
+
+  return { props: { people: user?.data || null } };
 }
 
 export default index;

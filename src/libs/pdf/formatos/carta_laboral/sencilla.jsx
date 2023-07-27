@@ -15,8 +15,8 @@ const PdfCartaLaboral = ({ data }) => {
 
   const onClic = async () => {
 
-    const img = await libs.urlImgBase64(data.logo);
-    const firma = await libs.urlImgBase64(data.firma1)
+    const img = await libs.urlImgBase64(data?.logo);
+    const firma = await libs.urlImgBase64(data?.firma1)
 
     var texto = "Me permito certificar que el señor(a) " + data?.nombre +
       " identificado con CC " + libs.formatNumber(data?.cedula) + " de " + data?.municipio + " presta sus servicios en la empresa " + data?.empresa +
@@ -34,7 +34,7 @@ const PdfCartaLaboral = ({ data }) => {
     startY = body(doc, startY, texto);
     startY += 10;
 
-    Firmas(doc, startY, firma, data.nombreFirma, data.ccFirma, data.cargoFirma, data.telefonoFirma, data.direccionFirma)
+    Firmas(doc, startY, firma, data?.nombreFirma, data?.ccFirma, data?.cargoFirma, data?.telefonoFirma, data?.direccionFirma)
 
     window.open(doc.output("bloburl"), "_blank");
   };

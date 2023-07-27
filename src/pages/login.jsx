@@ -3,6 +3,7 @@ import { useAuth } from "../libs/auth";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Alert from "../components/utiles/Alertas";
+import { Card, Row, Col, ListGroup, Form, Button } from 'react-bootstrap';
 
 export default function Login() {
   const [email, setEmail] = useState(null);
@@ -52,17 +53,44 @@ export default function Login() {
   }
 
   return (
-    <div
-      className="vw-100 vh-100"
-      style={{
-        backgroundColor: "#000000",
-        display: "grid",
-        placeContent: "center",
-        height: "100vh",
-      }}
-    >
+    <>
       <Alert color={colorAlert} descripcion={descripcionAlert} key={1} />
-      <div className="container">
+
+      <Card className="container d-flex justify-content-center align-items-center" style={{ minHeight: "90vh" }}>
+        <Row>
+          <Col>
+            <Form.Group controlId="emailInput">
+              <Form.Control
+                type="text"
+                placeholder="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Form.Group controlId="passwordInput">
+              <Form.Control
+                type="password"
+                placeholder="password"
+                value={password}
+                onChange={(e) => setPasword(e.target.value)}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Button onClick={handleLogin}>
+              Login
+            </Button>
+          </Col>
+        </Row>
+      </Card>
+
+      {/* <div className="container">
         <div>
           <div>
             <input
@@ -95,7 +123,10 @@ export default function Login() {
             </button>
           </div>
         </div>
-      </div>
-    </div>
+      </div> */}
+
+
+
+    </>
   );
 }
