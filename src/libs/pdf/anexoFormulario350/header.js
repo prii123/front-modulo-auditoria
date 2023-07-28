@@ -14,7 +14,7 @@ const header = (doc, data) => {
   doc.text("Señor(es):", 10, startY); // 41
   startY += 5;
   doc.setFont('courier','bold');
-  doc.text(data[0]?.empresa?.razonSocial + " - " + data[0]?.empresa?.nit, 10, startY); // 46
+  doc.text(data[0]?.razonSocial + " - " + data[0]?.nit, 10, startY); // 46
   doc.setFont('courier','normal');
   startY += 5;
   doc.text("La Ciudad", 10, startY);

@@ -5,7 +5,7 @@ const header = (doc, data) => {
   //configuracion de letra e imagen
   logo(doc)
   logo2(doc)
-  
+
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(11);
@@ -17,14 +17,14 @@ const header = (doc, data) => {
 
   //lineas Horizontales
   doc.line(10, 10, 200, 10);
-  
+
   // doc.addImage('../../../public/ayc.jpg', "JPEG", 10, 12, 46, 14, "medium");
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10);
   doc.text("Declaracion de Retencion en la Fuente", 65, 20);
   doc.setFontSize(11);
   doc.setFont("helvetica", "normal");
- 
+
   // doc.addImage(logoFormulario, "JPEG", 163, 12, 36, 14, "medium");
 
   //año de la retencion

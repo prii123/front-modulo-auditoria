@@ -5,6 +5,8 @@ import axios from "axios";
 
 
 const index = ({ people }) => {
+ 
+
 
   return (
     <Layout head={<div className="">{people?.name?.toUpperCase()}</div>}>

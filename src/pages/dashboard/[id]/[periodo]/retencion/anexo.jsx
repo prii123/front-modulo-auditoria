@@ -13,11 +13,6 @@ const retencion = ({ tipoRetencion, retenciones, retencionesGuardadas }) => {
   const [statusMenssage, setStatusMenssage] = React.useState(false);
   const [mensajeColor, setMensajeColor] = React.useState("");
 
-  // const hanleClieckAgregarOtrasRtetenciones = () => {
-  //   const id = router?.query?.id
-  //   const periodo = router?.query?.periodo;
-  //   router.push(`/${libs.principalPage()}/${id}/${periodo}/retencion/agregarotrasretenciones`)
-  // }
 
   const agregarTablaDeRetencion = async (e) => {
     const token = cookie.get('__session');
@@ -158,9 +153,9 @@ const retencion = ({ tipoRetencion, retenciones, retencionesGuardadas }) => {
                         </div>
                       </div>
                     </td>
-                    <td>{retencionesGuardadas.find(retencion => retencion.documentoId == ret.id)?.tiporetencion.concepto ? retencionesGuardadas.find(retencion => retencion.documentoId == ret.id)?.tiporetencion.concepto : 'Vacio'}</td>
+                    <td>{retencionesGuardadas.find(retencion => retencion.documentoId == ret.id)?.concepto ? retencionesGuardadas.find(retencion => retencion?.documentoId == ret?.id)?.concepto : 'Vacio'}</td>
                     <td>
-                      {retencionesGuardadas.find(retencion => retencion.documentoId == ret.id)?.tiporetencion.concepto ? (
+                      {retencionesGuardadas.find(retencion => retencion.documentoId == ret.id)?.concepto ? (
                         <button value={ret.id} onClick={(e) => borrarElemento(e)}>
                           borrar
                         </button>
@@ -211,7 +206,7 @@ export async function getServerSideProps(ctx) {
     },
   });
 
-  // console.log(retencionesPracticadas)
+
 
   return {
     props: {

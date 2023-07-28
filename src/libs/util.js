@@ -194,10 +194,7 @@ const ayudas = {
 
       return numeroEnLetras.trim() + " Pesos COP";
     }
-  }
-
-
-
+  },
 
 
 

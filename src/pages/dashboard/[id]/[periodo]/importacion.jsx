@@ -35,9 +35,26 @@ const importacion = ({ data, cantidades }) => {
         /* DO SOMETHING WITH workbook HERE */
         const wsname = workbook.SheetNames[0];
         const ws = workbook.Sheets[wsname];
-        const datos = XLSX.utils.sheet_to_json(ws);
-        // console.log(ws);
-        resolve(datos);
+
+
+       // Add the "defval" option to set a default value for empty cells
+       const datos = XLSX.utils.sheet_to_json(ws, { defval: "" });
+
+       // Filter out rows with any of the specified fields null or empty
+       const filteredDatos = datos.filter((row) => {
+         const { DocumentoCliente, NombredelCliente, NumeroDoc, NumeroFE, ValorNeto, IVA, ReteFuenteRenta, ReteFuenteIVA } = row;
+         return (
+           DocumentoCliente !== null && DocumentoCliente !== "" &&
+           NombredelCliente !== null && NombredelCliente !== "" &&
+           NumeroDoc !== null && NumeroDoc !== "" &&
+           ValorNeto !== null && ValorNeto !== "" &&
+           IVA !== null && IVA !== "" &&
+           ReteFuenteRenta !== null && ReteFuenteRenta !== "" &&
+           ReteFuenteIVA !== null && ReteFuenteIVA !== ""
+         );
+       });
+
+      resolve(filteredDatos);
       };
     });
 

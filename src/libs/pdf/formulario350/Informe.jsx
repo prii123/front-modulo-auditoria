@@ -11,10 +11,10 @@ const pdfInformeVisita = ({ data, nombre }) => {
   let totalRetencion = 0;
 
   data.map((retencion) => {
-    totalRetencion += retencion?.valor;
+    totalRetencion += parseInt(retencion?.valor);
   });
 
-  // console.log(totalRetencion)
+  //console.log(data)
 
   const onClic = () => {
     var doc = new jsPDF();
