@@ -1,7 +1,8 @@
 import React from "react";
 import Layout from "../../../components/layout/Body";
-import { myGet } from "../../../libs/fetchApi";
 import { useRouter } from "next/router";
+import axios from "axios";
+import libs from "../../../libs/util";
 
 const Nav = () => {
   const router = useRouter();
@@ -59,8 +60,26 @@ const listar = ({ data }) => {
 };
 
 export async function getServerSideProps(ctx) {
-  const json = await myGet("/usuarios", ctx);
-  return { props: { data: json?.usuarios } };
+  try {
+    const token = ctx?.req?.cookies?.__session;
+
+
+    const json = await axios({
+        method: "get",
+        url:
+            libs.location() + `/usuarios`,
+        headers: {
+            authorization: `Bearer ${token}`,
+        },
+    });
+    const data = json?.data?.usuarios || [];
+
+
+    return { props: { data } };
+} catch (error) {
+    console.error('Error fetching data:', error);
+    return { props: { data: [] } }; // Si ocurre algún error, asignamos un array vacío como valor predeterminado
+}
 }
 
 export default listar;

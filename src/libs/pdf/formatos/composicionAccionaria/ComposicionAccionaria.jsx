@@ -9,7 +9,7 @@ import body from "./body";
 
 // ----------------------------------------------------- PDF  ------------------------------------
 
-const PdfCartaLaboral = ({ data }) => {
+const PdfComposicionAccionaria = ({ data }) => {
 
 
   const onClic = async () => {
@@ -17,13 +17,7 @@ const PdfCartaLaboral = ({ data }) => {
     const img = await libs.urlImgBase64(data?.logo);
     const firma = await libs.urlImgBase64(data?.firma1)
 
-    var texto = "Me permito certificar que el señor(a) " + libs.capitalizeFirstLetterOfEachWord(data?.nombre?.toLowerCase()) +
-      " identificado con CC " + libs.formatNumber(data?.cedula) + " de " + libs.capitalizeFirstLetterOfEachWord(data?.municipio?.toLowerCase()) +
-      " presta sus servicios en la empresa " + libs.capitalizeFirstLetterOfEachWord(data?.empresa?.toLowerCase()) +
-      " identificada con NIT " + libs.formatNumber(data?.nit) + "-" + data?.dv + ". Actualmente se desempeña como " +
-      libs.capitalizeFirstLetterOfEachWord(data?.cargo?.toLowerCase()) + ", labora con nosotros desde " + data?.desde +
-      " y devenga un salario mensual de ($" + libs.formatNumber(data?.salario) + ".00) " + libs.numeroALetras(data?.salario) +
-      ". Su contrato de trabajo es " + libs.capitalizeFirstLetterOfEachWord(data?.contrato?.toLowerCase()) + ". "
+    var texto = "Me permito certificar queeeeeeeeeeeeeeeeeeee"
 
 
     var doc = new jsPDF();
@@ -50,4 +44,4 @@ const PdfCartaLaboral = ({ data }) => {
   );
 };
 
-export default PdfCartaLaboral;
+export default PdfComposicionAccionaria;

@@ -4,6 +4,7 @@ import cookie from "js-cookie";
 import libs from '../../../libs/util'
 import axios from "axios";
 import Alerta from "../../../components/utiles/Alertas";
+import { Form, Row, Col, Button } from 'react-bootstrap';
 
 const crear = () => {
   const token = cookie.get("__session");
@@ -85,7 +86,77 @@ const crear = () => {
   return (
     <Layout head={'CREACION DE EMPRESAS'}>
       <>
-        <div className="card p-3">
+      <div className="card p-3">
+      <Form>
+        <Row className="mb-3">
+          <Form.Label htmlFor="nit" className="col-sm-2 col-form-label">
+            NIT
+          </Form.Label>
+          <Col sm={5}>
+            <Form.Control
+              id="nit"
+              onChange={(e) => setNit(e.target.value)}
+            />
+          </Col>
+
+          <Form.Label htmlFor="dv" className="col-sm-2 col-form-label">
+            DV
+          </Form.Label>
+          <Col sm={2}>
+            <Form.Control
+              id="dv"
+              onChange={(e) => setDv(e.target.value)}
+            />
+          </Col>
+        </Row>
+
+        <Row className="mb-3">
+          <Form.Label htmlFor="razonSocial" className="col-sm-2 col-form-label">
+            RAZON SOCIAL
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control
+              id="razonSocial"
+              onChange={(e) => setRazonSocial(e.target.value)}
+            />
+          </Col>
+        </Row>
+
+        <Row className="mb-3">
+          <Form.Label htmlFor="direccion" className="col-sm-2 col-form-label">
+            DIRECCION
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control
+              id="direccion"
+              onChange={(e) => setDireccion(e.target.value)}
+            />
+          </Col>
+        </Row>
+
+        <Row className="mb-3">
+          <Form.Label htmlFor="ciudad" className="col-sm-2 col-form-label">
+            CIUDAD
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control
+              id="ciudad"
+              onChange={(e) => setCiudad(e.target.value)}
+            />
+          </Col>
+        </Row>
+
+        <div className="mb-3">
+          <Button className="btn btn-primary" onClick={guardarDatos}>
+            Guardar
+          </Button>
+
+          {alert && <Alerta descripcion={descripcion} color={color} />}
+        </div>
+      </Form>
+    </div>
+
+        {/* <div className="card p-3">
           <div className="mb-3 row">
             <label htmlFor="nit" className="col-sm-2 col-form-label">
               NIT
@@ -163,7 +234,7 @@ const crear = () => {
             <Alerta descripcion={descripcion} color={color} />
           )}
           </div>
-        </div>
+        </div> */}
       </>
     </Layout>
   );

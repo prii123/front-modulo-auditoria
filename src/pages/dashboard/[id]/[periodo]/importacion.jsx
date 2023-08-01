@@ -23,6 +23,34 @@ const importacion = ({ data, cantidades }) => {
 
   const auhtCook = cookie.get("__session");
 
+  // pruebaaaaaaaaaaaaaa -----------------------
+
+  const [fileContent, setFileContent] = React.useState('');
+
+  const handleFileRead = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      setFileContent(event.target.result);
+    };
+
+    reader.readAsText(file);
+  };
+
+  const handleSendToBackend = () => {
+
+    const test = libs.conversorJSONdeTXT(fileContent)
+
+
+    console.log(test)
+  };
+
+  // fin pruebaaa -----------------------------------
+
+
+
+
   const readExcel = (file) => {
     const promise = new Promise((resolve, reject) => {
       var reader = new FileReader();
@@ -37,24 +65,24 @@ const importacion = ({ data, cantidades }) => {
         const ws = workbook.Sheets[wsname];
 
 
-       // Add the "defval" option to set a default value for empty cells
-       const datos = XLSX.utils.sheet_to_json(ws, { defval: "" });
+        // Add the "defval" option to set a default value for empty cells
+        const datos = XLSX.utils.sheet_to_json(ws, { defval: "" });
 
-       // Filter out rows with any of the specified fields null or empty
-       const filteredDatos = datos.filter((row) => {
-         const { DocumentoCliente, NombredelCliente, NumeroDoc, NumeroFE, ValorNeto, IVA, ReteFuenteRenta, ReteFuenteIVA } = row;
-         return (
-           DocumentoCliente !== null && DocumentoCliente !== "" &&
-           NombredelCliente !== null && NombredelCliente !== "" &&
-           NumeroDoc !== null && NumeroDoc !== "" &&
-           ValorNeto !== null && ValorNeto !== "" &&
-           IVA !== null && IVA !== "" &&
-           ReteFuenteRenta !== null && ReteFuenteRenta !== "" &&
-           ReteFuenteIVA !== null && ReteFuenteIVA !== ""
-         );
-       });
+        // Filter out rows with any of the specified fields null or empty
+        const filteredDatos = datos.filter((row) => {
+          const { DocumentoCliente, NombredelCliente, NumeroDoc, NumeroFE, ValorNeto, IVA, ReteFuenteRenta, ReteFuenteIVA } = row;
+          return (
+            DocumentoCliente !== null && DocumentoCliente !== "" &&
+            NombredelCliente !== null && NombredelCliente !== "" &&
+            NumeroDoc !== null && NumeroDoc !== "" &&
+            ValorNeto !== null && ValorNeto !== "" &&
+            IVA !== null && IVA !== "" &&
+            ReteFuenteRenta !== null && ReteFuenteRenta !== "" &&
+            ReteFuenteIVA !== null && ReteFuenteIVA !== ""
+          );
+        });
 
-      resolve(filteredDatos);
+        resolve(filteredDatos);
       };
     });
 
@@ -182,6 +210,11 @@ const importacion = ({ data, cantidades }) => {
   return (
     <Layout head={<div>IMPORTACION DE DATOS</div>}>
 
+      <div>
+        <input type="file" onChange={handleFileRead} />
+        <button onClick={handleSendToBackend}>Enviar datos al backend</button>
+      </div>
+
       <div className="row">
         {data &&
           data.map((doc) => {
@@ -190,9 +223,9 @@ const importacion = ({ data, cantidades }) => {
               <div className={`col-3 hover-cards  p-0`} key={doc.id}>
                 <input
                   className={`form-check-input ${cantidades.find((valores) => valores.id == doc.id)
-                      .cantidad > 0
-                      ? "bg-success"
-                      : "none"
+                    .cantidad > 0
+                    ? "bg-success"
+                    : "none"
                     }`}
                   type="radio"
                   name="flexRadioDefault"
@@ -333,7 +366,7 @@ export async function getServerSideProps(ctx) {
 
   const cantidades = cant.data;
 
-  console.log(resp.data)
+  // console.log(resp.data)
 
   const json = resp.data;
 

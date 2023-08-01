@@ -59,7 +59,7 @@ export default function Login() {
       <Card className="container d-flex justify-content-center align-items-center" style={{ minHeight: "90vh" }}>
         <Row>
           <Col>
-            <Form.Group controlId="emailInput">
+            <Form.Group >
               <Form.Control
                 type="text"
                 placeholder="email"
@@ -71,7 +71,7 @@ export default function Login() {
         </Row>
         <Row>
           <Col>
-            <Form.Group controlId="passwordInput">
+            <Form.Group >
               <Form.Control
                 type="password"
                 placeholder="password"
@@ -90,43 +90,7 @@ export default function Login() {
         </Row>
       </Card>
 
-      {/* <div className="container">
-        <div>
-          <div>
-            <input
-              className="input-personalizado"
-              type="text"
-              placeholder="email"
-              onChange={(e) => {
-                e.preventDefault();
-                setEmail(e.target.value);
-              }}
-            />
-          </div>
-          <br />
-          <br />
-          <div>
-            <input
-              className="input-personalizado"
-              type="password"
-              placeholder="password"
-              onChange={(e) => {
-                e.preventDefault();
-                setPasword(e.target.value);
-              }}
-            />
-          </div>
-          <br />
-          <div>
-            <button className="input-personalizado" onClick={handleLogin}>
-              Login
-            </button>
-          </div>
-        </div>
-      </div> */}
-
-
-
+     
     </>
   );
 }

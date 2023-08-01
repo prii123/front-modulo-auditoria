@@ -55,7 +55,7 @@ const ayudas = {
   formatFechaLarga(hoy) {
     let mesLetras = "";
 
-    let dia = hoy.getDay();
+    let dia = hoy.getDay() - 1;
     let mes = hoy.getMonth() + 1;
     let agnio = hoy.getFullYear();
 
@@ -195,6 +195,86 @@ const ayudas = {
       return numeroEnLetras.trim() + " Pesos COP";
     }
   },
+
+
+  conversorJSONdeTXT(data) {
+    if (!data || typeof data !== 'string') {
+      console.error('El parámetro "data" no es una cadena válida o está vacío.');
+      return [];
+    }
+
+    var jsonData = []
+    var error = []
+
+    const splitDatosGeneral = data.split('\n')
+
+
+    for (let i in splitDatosGeneral) {
+
+      if (splitDatosGeneral[i].length < 27) {
+        console.warn('La línea ' + (parseInt(i) + 1) + ' no tiene el formato esperado y será omitida.');
+        var err = {
+          fila: (parseInt(i) + 1),
+          mensaje: 'La línea ' + (parseInt(i) + 1) + ' no tiene el formato esperado y será omitida.'
+        }
+        error.push(err)
+        continue; // Pasar a la siguiente línea
+      }
+      var splitPorLinea = splitDatosGeneral[i].split("   ")
+      const splitPorLinea2 = splitDatosGeneral[i].split("     ")[1].length > 69 ? splitDatosGeneral[i].split("     ")[1] : splitDatosGeneral[i].split("    ")[1]
+
+      if (splitPorLinea2.length < 0) {
+        console.warn('La línea ' + (parseInt(i) + 1) + ' hay un problema con debitos y creditos.');
+        var err = {
+          fila: (parseInt(i) + 1),
+          mensaje: 'La línea ' + (parseInt(i) + 1) + ' no tiene el formato esperado y será omitida.'
+        }
+        error.push(err)
+        continue; // Pasar a la siguiente línea
+      }
+
+      const tipoDoc = parseInt(splitPorLinea[0].slice(0, 2))
+      const numeroDoc = parseInt(splitPorLinea[0].slice(2, 10))
+      const annio = splitPorLinea[0].slice(10, 14)
+      const mes = splitPorLinea[0].slice(14, 16)
+      const dia = splitPorLinea[0].slice(16, 18)
+      const cuentaContable = parseInt(splitPorLinea[0].slice(18, 27))
+
+      const nit = parseInt(splitPorLinea[1].slice(0, 11))
+      const centroCostos = parseInt(splitPorLinea[1].slice(11, 17))
+
+      const valor = parseInt(splitPorLinea2.slice(0, 21)) > 0 ? parseInt(splitPorLinea2.slice(0, 21)) : parseInt(splitPorLinea2.slice(0, 36))
+
+
+      const dato = {
+        tipoDoc,
+        numeroDoc,
+        annio,
+        mes,
+        dia,
+        cuentaContable,
+        nit,
+        centroCostos,
+        valor
+      }
+
+      jsonData.push(dato)
+
+    }
+
+
+    return { jsonData, error }
+
+  },
+
+
+  capitalizeFirstLetterOfEachWord(text) {
+    return text
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
+
 
 
 

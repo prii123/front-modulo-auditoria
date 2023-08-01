@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { jsPDF } from "jspdf";
 import libs from '../../../util'
 import Firmas from './firmas'
@@ -11,6 +11,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 // ----------------------------------------------------- PDF  ------------------------------------
 
 const PdfCartaLaboralDiversosIngresos = ({ data }) => {
+
 
 
 
@@ -34,10 +35,13 @@ const PdfCartaLaboralDiversosIngresos = ({ data }) => {
         // Calcular el valor total sumando el salario y el total de los valores
         const valorTotal = salario + totalValores;
 
-        var texto = "Me permito certificar que el señor(a) " + data?.nombre +
-            " identificado con CC " + libs.formatNumber(data?.cedula) + " de " + data?.municipio + " presta sus servicios en la empresa " + data?.empresa +
-            " identificada con NIT " + libs.formatNumber(data?.nit) + "-" + data?.dv + ". Actualmente se desempeña como " + data?.cargo + ", labora con nosotros desde " + data?.desde +
-            " y devenga un salario mensual de ($" + libs.formatNumber(data?.salario) + ".00) " + libs.numeroALetras(data?.salario) + ". Su contrato de trabajo es " + data?.contrato + ", " + ingresos +
+        var texto = "Me permito certificar que el señor(a) " + libs.capitalizeFirstLetterOfEachWord(data?.nombre?.toLowerCase()) +
+            " identificado con CC " + libs.formatNumber(data?.cedula) + " de " + libs.capitalizeFirstLetterOfEachWord(data?.municipio?.toLowerCase()) +
+            " presta sus servicios en la empresa " + libs.capitalizeFirstLetterOfEachWord(data?.empresa?.toLowerCase()) +
+            " identificada con NIT " + libs.formatNumber(data?.nit) + "-" + data?.dv + ". Actualmente se desempeña como " +
+            libs.capitalizeFirstLetterOfEachWord(data?.cargo?.toLowerCase()) + ", labora con nosotros desde " + data?.desde +
+            " y devenga un salario mensual de ($" + libs.formatNumber(data?.salario) + ".00) " + libs.numeroALetras(data?.salario) +
+            ". Su contrato de trabajo es " + libs.capitalizeFirstLetterOfEachWord(data?.contrato?.toLowerCase()) + ", " + ingresos +
             ", Para un valor total promedio mensual de $" + libs.formatNumber(valorTotal) + " " + libs.numeroALetras(valorTotal) + "."
 
 
@@ -54,10 +58,12 @@ const PdfCartaLaboralDiversosIngresos = ({ data }) => {
         Firmas(doc, startY, firma, data?.nombreFirma, data?.ccFirma, data?.cargoFirma, data?.telefonoFirma, data?.direccionFirma)
 
         window.open(doc.output("bloburl"), "_blank");
-    };
+
+    }
 
     return (
         <div>
+
             <button className="btn-personalizado" onClick={onClic}>
                 <i className="fas fa-eye"></i>
             </button>

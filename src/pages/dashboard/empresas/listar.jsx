@@ -3,6 +3,7 @@ import Link from "next/link";
 import Layout from "../../../components/layout/Body";
 import { myGet } from "../../../libs/fetchApi";
 import { useRouter } from "next/router";
+import { Row, Col, Card } from 'react-bootstrap';
 
 const Nav = () => {
   const router = useRouter();
@@ -26,8 +27,34 @@ const empresas = ({ data }) => {
   // console.log(data);
   return (
     <Layout head={<Nav />}>
-      {/* {JSON.stringify(data)} */}
-      <div className="row">
+
+
+      <Row xs={1} md={2} className="g-4">
+        {data?.map((emp, key) => (
+          <Col key={key}>
+            <Link href={`/dashboard/[id]`} as={`/dashboard/${emp?.id}`}>
+              <Card className="mb-3 hover-cards" style={{ maxWidth: 540, maxHeight: 150 }}>
+                <Row className="g-0">
+                  <Col md={4}>
+                    <Card.Img src={emp?.logo} alt={emp?.razonSocial} className="img-fluid rounded-start" />
+                  </Col>
+                  <Col md={8}>
+                    <Card.Body>
+                      <Card.Title>{emp.razonSocial.toUpperCase()}</Card.Title>
+                      <Card.Text>{emp?.nit}</Card.Text>
+                      <Card.Text>{emp?.direccion + " - " + emp?.ciudad}</Card.Text>
+                    </Card.Body>
+                  </Col>
+                </Row>
+              </Card>
+            </Link>
+          </Col>
+        ))}
+      </Row>
+
+
+
+      {/* <div className="row">
         {data?.map((emp, key) => {
           return (
             <div key={key} className="col-6">
@@ -61,7 +88,7 @@ const empresas = ({ data }) => {
             </div>
           );
         })}
-      </div>
+      </div> */}
     </Layout>
   );
 };
