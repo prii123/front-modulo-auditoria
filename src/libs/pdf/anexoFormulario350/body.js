@@ -21,7 +21,7 @@ const body = (doc, startY, body) => {
 
   body.sort()
   body?.map((anexo) => {
-    console.log(anexo)
+
     startY += 5;
     startY = newPage(doc, startY, 40);
     doc.text(libs.formatNumber(anexo?.nit).toString(), 35, startY, { align: "right" });

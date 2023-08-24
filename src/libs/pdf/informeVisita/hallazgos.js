@@ -1,10 +1,11 @@
 import newPage from "../newPage";
 const hallazgos = (doc, startY, hallazgo, hallazgosGenerales) => {
   //configuracion del documento
+
   doc.setFont("courier", "normal");
   doc.setFontSize(11);
 
-  if (hallazgo) {
+  if (hallazgo.length > 0) {
     doc.setFont("courier", "bold");
     doc.text("SECCION DE HALLAZGOS Y PROCEDIMIENTO A SEGUIR :", 10, startY);
     doc.setFont("courier", "normal");
@@ -64,7 +65,7 @@ const hallazgos = (doc, startY, hallazgo, hallazgosGenerales) => {
 
   startY += 5;
 
-  if (hallazgosGenerales) {
+  if (hallazgosGenerales.length > 0) {
     doc.setFont("courier", "bold");
     doc.setFontSize(11);
     doc.text("ANOTACIONES GENERALES", 10, startY);

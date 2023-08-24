@@ -55,7 +55,7 @@ const ayudas = {
   formatFechaLarga(hoy) {
     let mesLetras = "";
 
-    let dia = hoy.getDay() - 1;
+    let dia = hoy.getDate() - 1;
     let mes = hoy.getMonth() + 1;
     let agnio = hoy.getFullYear();
 
