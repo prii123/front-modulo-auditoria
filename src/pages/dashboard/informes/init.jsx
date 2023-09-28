@@ -222,9 +222,7 @@ export async function getServerSideProps(ctx) {
     },
   });
 
-  console.log(libs.formatFechaLarga(new Date()))
-  console.log(new Date().getDate())
-
+ 
 
   const info = JSON.stringify({
     head: {

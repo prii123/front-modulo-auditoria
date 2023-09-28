@@ -1,13 +1,15 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState, useEffect } from "react";
-import Layout from "../../../../components/layout/Body";
-import Modal from "../../../../components/utiles/Modal";
+import Layout from "../../../../../components/layout/Body";
+import Modal from "../../../../../components/utiles/Modal";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import axios from "axios";
-import libs from "../../../../libs/util";
+import libs from "../../../../../libs/util";
 import cookie from "js-cookie";
-const doc = ({ documentosAuditar }) => {
+
+
+
+const facturas = ({ documentosAuditar }) => {
   const Router = useRouter();
 
   // console.log(documentosAuditar)
@@ -216,8 +218,6 @@ const doc = ({ documentosAuditar }) => {
               <th scope="col">Electronico</th>
               <th scope="col">Valor Neto</th>
               <th scope="col">Impuestos</th>
-              <th scope="col">ReteFuente</th>
-              <th scope="col">ReteIva</th>
               <th scope="col">Concepto</th>
               <th scope="col">Cuenta</th>
               <th scope="col">Nombre</th>
@@ -235,12 +235,10 @@ const doc = ({ documentosAuditar }) => {
                     <td>{key + 1}</td>
                     <td>{dat.documento}</td>
                     <td>{dat.razon_social ? dat.razon_social : dat.nombre1}</td>
-                    <td>{dat.nroCuenta}</td>
-                    <td>{dat.nroFactura}</td>
-                    <td className="text-end">{dat.netoGv}</td>
+                    <td>{dat.nro_factura}</td>
+                    <td>{dat.fe_number}</td>
+                    <td className="text-end">{dat.neto_gv}</td>
                     <td className="text-end">{dat.iva}</td>
-                    <td className="text-end">{dat.retRenta}</td>
-                    <td className="text-end">{dat.retIva}</td>
                     <td className="table-info">-</td>
                     <td className="table-info">-</td>
                     <td className="table-info">-</td>
@@ -268,7 +266,6 @@ const doc = ({ documentosAuditar }) => {
 
 export async function getServerSideProps(ctx) {
   const token = ctx?.req?.cookies?.__session;
-  const tipoDoc = ctx?.query?.doc;
   const periodo = ctx?.query?.periodo;
   const annio = periodo.split('-')[0]
   const mes = periodo.split('-')[1]
@@ -281,9 +278,7 @@ export async function getServerSideProps(ctx) {
     method: "get",
     url:
       libs.location() +
-      "/fuente-docs/" +
-      tipoDoc +
-      "/" +
+      "/fuente-docs/factura/" +
       idEmpresa+
       "/"+
       annio+"/"+mes
@@ -301,4 +296,4 @@ export async function getServerSideProps(ctx) {
   };
 }
 
-export default doc;
+export default facturas;

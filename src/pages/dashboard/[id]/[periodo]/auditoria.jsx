@@ -12,12 +12,24 @@ const auditoria = ({ data }) => {
 
   // console.log(data)
 
+  var documentos = [
+    { id: 1, nombre: 'Facturas de venta', url:'factura' },
+    { id: 2, nombre: 'Recibos de caja', url:'rcaja_cont' },
+    { id: 3, nombre: 'Nota credito venta', url:'notaCVentas' },
+    { id: 4, nombre: 'Cuenta por Pagar', url:'cuentasPorPagar' },
+    { id: 5, nombre: 'Nota credito compra', url:'notaCCompras' },
+    { id: 6, nombre: 'Orden de Pago', url:'ordenPagoCont' },
+    { id: 7, nombre: 'Pago directo', url:'pagoDirectoCont' },
+    { id: 8, nombre: 'Nota debito compra', url:'notaDCompras' },
+    { id: 9, nombre: 'Nota debito ventas', url:'notaDVentas' }
+  ]
+
   return (
     <Layout head={<div>AUDITORIA</div>} >
 
       <div className="row">
-        {data &&
-          data.map((dato) => {
+        {documentos &&
+          documentos.map((dato) => {
             return (
               <div key={dato?.id} className="p-4 col-sm-6 col-lg-4">
                 <div className="card text-center ">
@@ -34,7 +46,7 @@ const auditoria = ({ data }) => {
                         "/" +
                         Router?.query?.periodo +
                         "/" +
-                        dato?.id
+                        dato?.url
                       }
                     >
                       <a className="btn btn-primary">Empezar</a>
@@ -60,7 +72,9 @@ export async function getServerSideProps(ctx) {
     },
   });
 
-  // console.log(tiposDeDocumentos)
+ 
+
+  //console.log(tiposDeDocumentos)
 
   return {
     props: {
