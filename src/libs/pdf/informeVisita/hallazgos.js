@@ -34,7 +34,7 @@ const hallazgos = (doc, startY, hallazgo, hallazgosGenerales) => {
       "Tipo de documento: " +
       hall?.nombre?.toUpperCase() +
       " numero " +
-      hall?.numeroDoc,
+      hall?.numeroDocumento,
       10,
       startY
     );

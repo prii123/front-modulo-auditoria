@@ -13,6 +13,7 @@ const modificar = ({ data }) => {
   const [direccion, setDireccion] = useState("");
   const [ciudad, setCiudad] = useState("");
   const [autorr, setAutorr] = useState('');
+  const [idSadi, setIdSadi] = useState('');
 
   const [alert, setAlert] = useState(false);
   const [descripcion, setDescripcion] = useState("");
@@ -37,6 +38,7 @@ const modificar = ({ data }) => {
         direccion,
         ciudad,
         autorrenta: autorr,
+        id_sadi: idSadi
       };
       // console.log(docBody)
       const actualizar = await axios({
@@ -79,6 +81,7 @@ const modificar = ({ data }) => {
     setDireccion(data[0]?.direccion);
     setCiudad(data[0]?.ciudad);
     setAutorr(data[0]?.autorrenta);
+    setIdSadi(data[0]?.id_sadi)
   }, []);
 
   //   console.log(data);
@@ -174,8 +177,24 @@ const modificar = ({ data }) => {
                 value={autorr}
               />
             </div>
-
           </div>
+
+          <div className="mb-3 row">
+            <label htmlFor="autorrenta" className="col-sm-2 col-form-label">
+              ID SADI
+            </label>
+            <div className="col-sm-2">
+              <input
+                type="number"
+                htmlFor="idSadi"
+                className="form-control hover-cards"
+                id="autorrenta"
+                onChange={(e) => setIdSadi(e.target.value)}
+                value={idSadi}
+              />
+            </div>
+          </div>
+
 
           <div className="mb-3">
             <button className="btn btn-primary" onClick={guardarDatos}>

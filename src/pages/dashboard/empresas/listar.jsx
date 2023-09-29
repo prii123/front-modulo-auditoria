@@ -3,7 +3,7 @@ import Link from "next/link";
 import Layout from "../../../components/layout/Body";
 import { myGet } from "../../../libs/fetchApi";
 import { useRouter } from "next/router";
-import { Row, Col, Card } from 'react-bootstrap';
+import { Row, Col, Card, Button } from 'react-bootstrap';
 
 const Nav = () => {
   const router = useRouter();
@@ -32,8 +32,8 @@ const empresas = ({ data }) => {
       <Row xs={1} md={2} className="g-4">
         {data?.map((emp, key) => (
           <Col key={key}>
-            <Link href={`/dashboard/[id]`} as={`/dashboard/${emp?.id}`}>
-              <Card className="mb-3 hover-cards" style={{ maxWidth: 540, maxHeight: 150 }}>
+            <Link href={`/dashboard/[id]`} as={`/dashboard/${emp?.id_sadi}`}>
+              <Card className="mb-3 " style={{ maxWidth: 540, minHeight: 150 }}>
                 <Row className="g-0">
                   <Col md={4}>
                     <Card.Img src={emp?.logo} alt={emp?.razonSocial} className="img-fluid rounded-start" />
@@ -43,6 +43,13 @@ const empresas = ({ data }) => {
                       <Card.Title>{emp.razonSocial.toUpperCase()}</Card.Title>
                       <Card.Text>{emp?.nit}</Card.Text>
                       <Card.Text>{emp?.direccion + " - " + emp?.ciudad}</Card.Text>
+
+                      <Link href={`/dashboard/[id]`} as={`/dashboard/${emp?.id_sadi}`}>
+                        <Button variant="primary">Auditar</Button>
+                      </Link>
+                      <Link href={`/dashboard/empresas/[id]`} as={`/dashboard/empresas/${emp?.id}`}>
+                        <Button variant="success">Modificar</Button>
+                      </Link>
                     </Card.Body>
                   </Col>
                 </Row>

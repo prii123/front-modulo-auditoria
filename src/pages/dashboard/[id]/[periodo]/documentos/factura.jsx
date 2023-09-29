@@ -1,13 +1,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState, useEffect } from "react";
-import Layout from "../../../../components/layout/Body";
-import Modal from "../../../../components/utiles/Modal";
+import Layout from "../../../../../components/layout/Body";
+import Modal from "../../../../../components/utiles/Modal";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import axios from "axios";
-import libs from "../../../../libs/util";
+import libs from "../../../../../libs/util";
 import cookie from "js-cookie";
-const doc = ({ documentosAuditar }) => {
+
+
+const factura = ({ documentosAuditar, hallazgos }) => {
   const Router = useRouter();
 
   // console.log(documentosAuditar)
@@ -19,34 +21,6 @@ const doc = ({ documentosAuditar }) => {
   const [hallazgoModal, setHallazgoModal] = useState([]);
   const [idDelHallazgoEncontrado, setIdDelHallazgoEncontrado] = useState("");
 
-  const eliminarDatos = async () => {
-    const token = cookie.get("__session");
-
-    const idEmpresa = Router?.query?.id;
-    const periodo = Router?.query?.periodo;
-    const tipoDoc = Router?.query?.doc;
-
-    const documentosPeriodo = await axios({
-      method: "delete",
-      url:
-        libs.location() +
-        "/documentos/" +
-        periodo +
-        "/" +
-        tipoDoc +
-        "/" +
-        idEmpresa,
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
-
-    // console.log(documentosPeriodo)
-
-    if (documentosPeriodo.status == 200) {
-      window.location.reload();
-    }
-  };
 
   const incertarHallazgos = async () => {
     const token = cookie.get("__session");
@@ -55,7 +29,7 @@ const doc = ({ documentosAuditar }) => {
       empresaId: Router.query.id,
       periodo: Router.query.periodo,
       documentoId: idDocumentoAuditado,
-      tipodocumentoId: Router.query?.doc,
+      tipodocumentoId: 4,
       hallazgo: hallazgo,
       accionCorrectiva: accionSeguir,
     };
@@ -63,7 +37,7 @@ const doc = ({ documentosAuditar }) => {
     // console.log(docBody)
 
     if (!idDelHallazgoEncontrado == "") {
-      const incertarHallaz = await axios({
+      await axios({
         method: "patch",
         url: libs.location() + "/hallazgos/" + idDelHallazgoEncontrado,
         headers: {
@@ -72,7 +46,8 @@ const doc = ({ documentosAuditar }) => {
         data: docBody,
       });
     } else {
-      const incertarHallaz = await axios({
+
+      await axios({
         method: "post",
         url: libs.location() + "/hallazgos",
         headers: {
@@ -83,18 +58,6 @@ const doc = ({ documentosAuditar }) => {
 
 
 
-      const actualizaDocumento = await axios({
-        method: "patch",
-        url: libs.location() + "/documentos/" + idDocumentoAuditado,
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-        data: {
-          hallazgo: incertarHallaz?.data?.id,
-        },
-      });
-
-      // console.log(actualizaDocumento)
     }
     setModal("none");
     Router.reload()
@@ -120,7 +83,7 @@ const doc = ({ documentosAuditar }) => {
   const eliminarHalazgo = async () => {
     const token = cookie.get("__session");
 
-    const hallazgoo = await axios({
+    await axios({
       method: "delete",
       url: libs.location() + "/hallazgos/" + hallazgoModal[0]?.id,
       headers: {
@@ -129,7 +92,7 @@ const doc = ({ documentosAuditar }) => {
     });
 
 
-    const actualizaDocumento = await axios({
+     await axios({
       method: "patch",
       url: libs.location() + "/documentos/" + idDocumentoAuditado,
       headers: {
@@ -143,7 +106,7 @@ const doc = ({ documentosAuditar }) => {
     setModal("none");
     window.location.reload();
 
-    //  console.log(hallazgo)
+
   };
 
   return (
@@ -188,24 +151,11 @@ const doc = ({ documentosAuditar }) => {
         </div>
       </Modal>
 
-      <br />
-      <a className="pe-auto text-decoration-none" onClick={eliminarDatos}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width={16}
-          height={16}
-          fill="currentColor"
-          className="bi bi-archive"
-          viewBox="0 0 16 16"
-        >
-          <path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1V2zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5H2zm13-3H1v2h14V2zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
-        </svg>
-        &nbsp;&nbsp;&nbsp;Eliminar
-      </a>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <br />
+
       <br />
       <div>
+
+
         <table className="table table-bordered table-hover" style={{ fontSize: '.9rem' }}>
           <thead>
             <tr>
@@ -230,7 +180,7 @@ const doc = ({ documentosAuditar }) => {
                   <tr
                     key={dat.id}
                     id={dat.id}
-                    className={dat.estado != 1 ? "table-success" : "none"}
+                    className={hallazgos.find(hall => hall.documentoId == dat.id) ? "table-success" : "none"}
                   >
                     <td>{key + 1}</td>
                     <td>{dat.documento}</td>
@@ -261,29 +211,30 @@ const doc = ({ documentosAuditar }) => {
               }) : null}
           </tbody>
         </table>
+
+
+
       </div>
+
+
+
     </Layout>
   );
 };
 
 export async function getServerSideProps(ctx) {
   const token = ctx?.req?.cookies?.__session;
-  const tipoDoc = ctx?.query?.doc;
   const periodo = ctx?.query?.periodo;
   const annio = periodo.split('-')[0]
   const mes = periodo.split('-')[1]
   const idEmpresa = ctx?.query?.id;
-
-  // console.log(tipoDoc); getServerSideProps
 
 
   const documentosPeriodo = await axios({
     method: "get",
     url:
       libs.location() +
-      "/fuente-docs/" +
-      tipoDoc +
-      "/" +
+      "/fuente-docs/factura/" +
       idEmpresa+
       "/"+
       annio+"/"+mes
@@ -294,11 +245,23 @@ export async function getServerSideProps(ctx) {
   });
 
 
+  const hallazgos = await axios({
+    method: "get",
+    url: libs.location() + "/hallazgos/"+periodo+"/" + idEmpresa,
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
+
+
+
+
   return {
     props: {
       documentosAuditar: documentosPeriodo?.data,
+      hallazgos: hallazgos.data
     },
   };
 }
 
-export default doc;
+export default factura;

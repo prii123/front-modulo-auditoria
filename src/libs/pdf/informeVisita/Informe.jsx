@@ -8,9 +8,7 @@ import body from "./body";
 import hallazgos from "./hallazgos";
 
 const pdfInformeVisita = ({ data, nombre }) => {
-  // Default export is a4 paper, portrait, using millimeters for units
 
-  //
 
 
   const onClic = () => {

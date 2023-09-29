@@ -17,15 +17,19 @@ const retencion = ({ tipoRetencion, retenciones, retencionesGuardadas }) => {
   const agregarTablaDeRetencion = async (e) => {
     const token = cookie.get('__session');
 
+    const { query } = router;
+
+    // console.log(e.target.parentNode.parentNode.parentNode.parentNode.parentNode)
+
     let documentoId = parseInt(e.target.parentNode.parentNode.parentNode.parentNode.parentNode.childNodes[0].innerText)
-    // console.log(idDocumento)
+    // console.log(documentoId)
     const tiporetencionId = parseInt(e.target.value);
     let documento = retenciones.find(valor => valor.id == documentoId);
     // console.log(documento)
-    let empresaId = documento?.empresaId;
-    let periodo = documento?.periodo;
-    let base = documento?.valorNeto;
-    let valor = documento?.reteFuente;
+    let empresaId = documento?.id_empresa;
+    let periodo = query?.periodo;
+    let base = documento?.netoGv;
+    let valor = documento?.retRenta;
 
     // console.log(tiporetencionId + "-" + empresaId + "-" + documentoId + "-" + periodo + "-" + base + "-" + valor)
 
@@ -51,7 +55,6 @@ const retencion = ({ tipoRetencion, retenciones, retencionesGuardadas }) => {
       });
 
       const statusCode = tipoRetencion.status > 200 ? true : false;
-      console.log(statusCode)
 
 
 
@@ -119,15 +122,11 @@ const retencion = ({ tipoRetencion, retenciones, retencionesGuardadas }) => {
                   <tr key={key + 1}>
                     <td scope="row">{ret.id}</td>
                     <td className="text-end">{ret.nit}</td>
-                    <td>{ret.razonSocial}</td>
-                    <td>{ret.numeroDoc}</td>
-                    <td className="text-end">{libs.formatNumber(ret.valorNeto)}</td>
-                    <td className="text-end">{libs.formatNumber(ret.reteFuente)}</td>
-                    <td className="text-end">
-                      {libs.formatNumber(Number.parseFloat(
-                        (ret.reteFuente / ret.valorNeto) * 100
-                      ).toFixed(2)) + " %"}
-                    </td>
+                    <td>{ret.razon_social ? ret.razon_social : ret.nombre1}</td>
+                    <td>{ret.nroCuenta}</td>
+                    <td className="text-end">{libs.formatNumber(ret.netoGv)}</td>
+                    <td className="text-end">{libs.formatNumber(ret.retRenta)}</td>
+                    <td className="text-end">{ret._rrenta + " %"}</td>
                     <td>
                       <div className="row g-2">
                         <div className="col-md">

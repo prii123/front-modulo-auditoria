@@ -24,12 +24,12 @@ export const cards = [
     descripcion: "Realiza tu informe de auditoria",
     link: "informe",
   },
-  {
-    id: 4,
-    titulo: "Importar Datos",
-    descripcion: "Importa tus datos",
-    link: "importacion",
-  },
+  // {
+  //   id: 4,
+  //   titulo: "Importar Datos",
+  //   descripcion: "Importa tus datos",
+  //   link: "importacion",
+  // },
 ];
 const index = ({ data }) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks

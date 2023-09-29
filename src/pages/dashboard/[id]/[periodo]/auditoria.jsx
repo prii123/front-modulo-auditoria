@@ -16,7 +16,7 @@ const auditoria = ({ data }) => {
     { id: 1, nombre: 'Facturas de venta', url:'factura' },
     { id: 2, nombre: 'Recibos de caja', url:'rcaja_cont' },
     { id: 3, nombre: 'Nota credito venta', url:'notaCVentas' },
-    { id: 4, nombre: 'Cuenta por Pagar', url:'cuentasPorPagar' },
+    { id: 4, nombre: 'Cuenta por Pagar', url:'cuentasporpagar' },
     { id: 5, nombre: 'Nota credito compra', url:'notaCCompras' },
     { id: 6, nombre: 'Orden de Pago', url:'ordenPagoCont' },
     { id: 7, nombre: 'Pago directo', url:'pagoDirectoCont' },
@@ -30,6 +30,7 @@ const auditoria = ({ data }) => {
       <div className="row">
         {documentos &&
           documentos.map((dato) => {
+            const url = "/dashboard/[id]/[periodo]/documentos/"+dato?.url
             return (
               <div key={dato?.id} className="p-4 col-sm-6 col-lg-4">
                 <div className="card text-center ">
@@ -39,13 +40,13 @@ const auditoria = ({ data }) => {
                       <strong>{dato?.nombre}</strong>
                     </h5>
                     <Link
-                      href="/dashboard/[id]/[periodo]/[doc]"
+                      href={url}
                       as={
                         "/dashboard/" +
                         Router?.query?.id +
                         "/" +
                         Router?.query?.periodo +
-                        "/" +
+                        "/documentos/" +
                         dato?.url
                       }
                     >

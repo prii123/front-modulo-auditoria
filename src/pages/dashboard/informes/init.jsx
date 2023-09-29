@@ -207,7 +207,7 @@ export async function getServerSideProps(ctx) {
   const hallazgos = await axios({
     method: "get",
     url:
-      libs.location() + "/hallazgos/" + periodo + "/" + idEmpresa,
+      libs.location() + "/informes/consulta-hallazgos/" + idEmpresa + "/" + periodo,
     headers: {
       authorization: `Bearer ${token}`,
     },
