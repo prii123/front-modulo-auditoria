@@ -21,19 +21,19 @@ const body = (doc, startY, body) => {
 
   body.sort()
   body?.map((anexo) => {
-
+    // console.log(anexo)
     startY += 5;
     startY = newPage(doc, startY, 40);
-    doc.text(libs.formatNumber(anexo?.nit).toString(), 35, startY, { align: "right" });
-    let rz = doc.splitTextToSize(anexo?.razonSocial.toString(), 40);
+    doc.text(libs.formatNumber(anexo?.documento).toString(), 35, startY, { align: "right" });
+    let rz = doc.splitTextToSize(anexo?.razon_social?.toString(), 40);
 
     doc.text(rz[0], 38, startY);
-    doc.text(anexo?.numeroDoc?.toString() || '-', 80, startY);
-    doc.text(anexo?.numeroFE?.toString() || '-', 94, startY);
+    doc.text(anexo?.nroCuenta?.toString() || '-', 80, startY);
+    doc.text(anexo?.nroFactura?.toString() || '-', 94, startY);
 
     doc.text(anexo?.concepto?.substr(0, 14)?.toString() || '-', 118, startY);
-    doc.text(libs.formatNumber(anexo?.base).toString() || '-', 175, startY, { align: "right" });
-    doc.text(libs.formatNumber(anexo?.valor).toString() || '-', 200, startY, { align: "right" });
+    doc.text(libs.formatNumber(anexo?.netoGv).toString() || '-', 175, startY, { align: "right" });
+    doc.text(libs.formatNumber(anexo?.retRenta).toString() || '-', 200, startY, { align: "right" });
   });
 
   startY += 5;

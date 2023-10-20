@@ -131,6 +131,8 @@ const index = ({
   informeVisita,
   informeAnexoRetencion,
 }) => {
+
+
   return (
     <Layout>
       <div className="container text-center">
